@@ -7,7 +7,6 @@ import MetaTag from "../components/meta-tag";
 
 const Contact: NextPage = () => {
   const breadcrumb = [
-    {name: 'Home', link: '/mobile'},
     {name: "Contact", link: ''}
   ]
   

@@ -1,5 +1,7 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { stat } from "fs";
+import { Cart } from "../models/cart";
 import CartService from "../services/cart";
 // import { CartService } from "../services/cart";
 
@@ -13,13 +15,15 @@ export const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       console.log('addToCart')
-      console.log(action)
-      const cart = CartService.addToCart(action.payload.item, action.payload.quantity)
-      console.log(cart)
-      state.data = cart
+      const cartStorage = CartService.initCart()
+      const cartModel = new Cart(cartStorage)
+      state.data = cartModel.addToCart(action.payload.item, action.payload.quantity)
     },
     removeCartItem: (state, action) => {
       console.log('removeCartItem')
+      const cartStorage = CartService.initCart()
+      const cartModel = new Cart(cartStorage)
+      state.data = cartModel.removeItem(action.payload.id)
     },
     emptyCart: (state, action) => {
       console.log('emptyCart')
