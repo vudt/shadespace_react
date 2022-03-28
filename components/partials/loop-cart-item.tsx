@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { removeCartItem } from "../../redux/cartSlice";
+import Modal from 'react-modal';
+import LoginForm from "../forms/login-form";
 import { CartData } from "../../interfaces/cart";
 
+const customStyles = {
+  content: {
+    width: '75%',
+    top: '20%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    padding: '15px'
+  },
+};
+
+Modal.setAppElement('#__next');
+
 const LoopCartItem = (props: {cart: CartData}) => {
-  console.log(props.cart)
   const dispatch = useAppDispatch()
+  const [showModal, setShowModal] = useState<boolean>(false)
+  console.log(props.cart)
+
   const renderCart = () => {
     return props.cart.items.map((item, key) => (
-      <div className="item-col-2 item-grid cart-item">
+      <div key={key} className="item-col-2 item-grid cart-item">
         <a className="full-img">
           <img src={item.thumbnail} />
         </a>
@@ -20,22 +39,73 @@ const LoopCartItem = (props: {cart: CartData}) => {
     ))
   }
 
+  const renderButton = () => {
+    return (
+      <>
+        <div className="clearfix"></div>
+        <div className="form">
+          <a onClick={() => beforeSendSwatches()} className="button display-block send-watch">
+            Send swatches
+          </a>
+        </div>
+      </>
+    )
+  }
+
+  const beforeSendSwatches = () => {
+    const accessToken = sessionStorage.getItem('accessToken')
+    if (!accessToken) {
+      // show popup login
+      console.log('popup')
+      setShowModal(true)
+    } else {
+      // redirect checkout
+      console.log('checkout')
+    }
+  }
+
+  
+
+  function openModal() {
+    setShowModal(true);
+  }
+
+  function afterOpenModal() {
+    setShowModal(true);
+  }
+
+  function closeModal() {
+    setShowModal(false);
+  }
+
+  console.log(showModal)
+
   return (
     <div className="section">
       <div className="container">
         <div className="grid-border material-container">
           <div className="clearfix grid-border-inner">
             <div className="clearfix">
-              
-              {props.cart.items.length > 0 ? (
-                renderCart()
-              ) : (
+              { props.cart.items.length > 0 ? (
+                [renderCart(), renderButton()]
+               ) : (
                 <p>There is no item in cart.</p>
               )}
-   
             </div>
           </div>
         </div>
+        
+        <Modal
+          isOpen={showModal}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Login"
+        >
+          <h3>Login</h3>
+          <LoginForm />
+        </Modal>
+
       </div>
     </div>
   )

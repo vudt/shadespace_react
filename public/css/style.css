@@ -629,6 +629,43 @@ p {
     margin-bottom: 15px;
 }
 
+.register-now {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.register-now > a {
+    text-decoration: underline;
+}
+
+.menu-header {
+    display: flex;
+    height: 77px;
+    align-items: center;
+}
+
+.menu-header span:nth-child(1) {
+    flex-grow: 4;
+    margin-right: 10px;
+    position: relative;
+    font-size: 0.95rem;
+}
+
+.menu-header span:nth-child(1)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    height: 77px;
+    background: #82807f;
+    top: -28px;
+    width: 1px;
+}
+
+.menu-header span:nth-child(2) {
+    flex-grow: 1;
+    font-size: 0.95rem;
+}
+
 @media only screen and (min-width: 320px) {
     .slide-item {
         height: 225px;

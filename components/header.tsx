@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { Cart } from "../models/cart";
-import CartService from "../services/cart";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { toggleNav } from "../redux/navigationSlice";
 
@@ -10,7 +10,6 @@ const Header = () => {
   const [totalQuantity, setTotalQuantity] = useState<number>(0)
 
   useEffect(()=> {
-    // let cartStorage = CartService.initCart()
     const cartModel = new Cart(cart.data)
     let total_qty = cartModel.totalQuantity()
     setTotalQuantity(total_qty)
@@ -27,12 +26,14 @@ const Header = () => {
       </a>
       <div className="header-right inline-block-wrap">
         <div className="action-btns inline-block-item">
-          <a href="#" className="cart-icon cart-btn ui-link">
-            <i className="fa fa-shopping-cart" />
-            { totalQuantity &&
-              <span className="count">{totalQuantity}</span>
-            }
-          </a>
+          <Link href="/cart">
+            <a className="cart-icon cart-btn ui-link">
+              <i className="fa fa-shopping-cart" />
+              { totalQuantity &&
+                <span className="count">{totalQuantity}</span>
+              }
+            </a>
+          </Link>
           <a id="showRightPush" className="menu ui-link" onClick={toggleMenu}>
             <i className="fa fa-bars" />
           </a>
