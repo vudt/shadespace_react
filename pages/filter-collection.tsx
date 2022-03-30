@@ -7,6 +7,7 @@ import BottomButton from "../components/partials/bottom-button";
 import useFetchData from "../hooks/fetch-data";
 import { useRouter } from "next/router";
 import styled from 'styled-components';
+import withAuth from "../HOCs/withAuth";
 import LoopFilterCollection from "../components/partials/loop-filter-collection";
 
 const FilterCollection: NextPage = () => {
@@ -52,4 +53,4 @@ const VAlert = styled.div `
   padding-bottom: 10px;
 `
 
-export default FilterCollection
+export default withAuth(FilterCollection)

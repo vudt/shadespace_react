@@ -8,6 +8,7 @@ import Loading from '../../components/loading';
 import GridMeasureInstall from "../../components/partials/grid-measure-install";
 import BottomButton from "../../components/partials/bottom-button";
 import { PageMeta, IMeasureMent } from "../../interfaces/page";
+import withAuth from "../../HOCs/withAuth";
 import MetaTag from "../../components/meta-tag";
 
 
@@ -69,4 +70,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default MeasureInstall;
+export default withAuth(MeasureInstall);

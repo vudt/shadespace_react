@@ -19,7 +19,7 @@ const codeMessage: { [status: number]: string } = {
 };
 
 async function request(url: string, options: any = {}) {
-  try {
+  try {    
     const response: AxiosResponse = await axios({
       method: "GET",
       url,

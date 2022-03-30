@@ -9,7 +9,8 @@ import PageContent from "../components/partials/page-content";
 import useFetchData from "../hooks/fetch-data";
 import styled from 'styled-components';
 import LoopMaterial from "../components/partials/loop-material";
-import { GridItem, TermItem, PageMeta } from "../interfaces/page";
+import { TermItem } from "../interfaces/page";
+import withAuth from "../HOCs/withAuth";
 import pageAPI from "../services/page";
 
 interface PageProps {
@@ -81,4 +82,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default FilterMaterial
+export default withAuth(FilterMaterial)

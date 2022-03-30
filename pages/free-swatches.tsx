@@ -8,6 +8,7 @@ import MetaTag from "../components/meta-tag";
 import pageAPI from "../services/page";
 import Loading from '../components/loading';
 import BottomButton from "../components/partials/bottom-button";
+import withAuth from "../HOCs/withAuth";
 import { useToasts } from "react-toast-notifications";
 
 interface PageProps {
@@ -93,4 +94,5 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default FreeSwatches
+// export default FreeSwatches
+export default withAuth(FreeSwatches)

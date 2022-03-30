@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import BreadCrumb from "../components/partials/breadcrumb";
 import LoopCartItem from "../components/partials/loop-cart-item";
 import { useAppSelector } from "../redux/store";
+import withAuth from "../HOCs/withAuth";
 import MetaTag from "../components/meta-tag";
 import BottomButton from "../components/partials/bottom-button";
 
@@ -19,6 +20,5 @@ const Cart: NextPage = () => {
     </>
   )
 }
-
-
-export default Cart;
+export default withAuth(Cart)
+// export default withAuth(Cart)({protected: false})

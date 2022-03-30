@@ -8,6 +8,7 @@ import BottomButton from "../components/partials/bottom-button";
 import PageContent from "../components/partials/page-content";
 import { PageMeta,GridItem} from "../interfaces/page";
 import MetaTag from "../components/meta-tag";
+import withAuth from "../HOCs/withAuth";
 import { useToasts } from "react-toast-notifications";
 
 interface PageProps {
@@ -80,4 +81,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default CustomerServices;
+export default withAuth(CustomerServices);

@@ -6,6 +6,7 @@ import BreadCrumb from "../../components/partials/breadcrumb";
 import PageContent from "../../components/partials/page-content";
 import GridBorder from "../../components/partials/grid-border";
 import BottomButton from "../../components/partials/bottom-button";
+import withAuth from "../../HOCs/withAuth";
 import MetaTag from "../../components/meta-tag";
 
 const WindowTreatMents: NextPage = (props) => {
@@ -37,4 +38,4 @@ const WindowTreatMents: NextPage = (props) => {
 }
 
 
-export default WindowTreatMents
+export default withAuth(WindowTreatMents)

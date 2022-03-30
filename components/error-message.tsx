@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const SPAlert = (props: {text: string}) => {
-  console.log(props.text)
   return (
     <Alert>{ props.text }</Alert>
   )

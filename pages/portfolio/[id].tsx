@@ -8,6 +8,7 @@ import BottomButton from "../../components/partials/bottom-button";
 import GridGalleries from "../../components/partials/grid-galleries";
 import { TermMeta, GalleryItem } from "../../interfaces/page";
 import MetaTag from "../../components/meta-tag";
+import withAuth from "../../HOCs/withAuth";
 import { useToasts } from "react-toast-notifications";
 
 interface PageProps {
@@ -83,4 +84,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default SinglePortfolio;
+export default withAuth(SinglePortfolio);

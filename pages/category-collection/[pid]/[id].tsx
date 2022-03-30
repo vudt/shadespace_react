@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import type { NextPage } from 'next';
 import pageAPI from "../../../services/page";
 import { PageMeta, BreadCumb } from "../../../interfaces/page";
+import withAuth from "../../../HOCs/withAuth";
 import Loading from "../../../components/loading";
 import CollectionItem from "../../../components/partials/collection-item";
 import PageContent from "../../../components/partials/page-content";
@@ -84,4 +85,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default CategoryCollection
+export default withAuth(CategoryCollection)

@@ -1,32 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import pageAPI from "../../services/page";
 import { useToasts } from 'react-toast-notifications';
 import LoadingSpin from "react-loading-spin";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { userLogin, logout } from "../../redux/authSlice";
+import { userLogin } from "../../redux/authSlice";
+import { ParamsLogin } from "../../interfaces/auth";
 import SPAlert from "../error-message";
 import styled from "styled-components";
-import lodash from "lodash"
+import { useRouter } from "next/router";
 
-
-interface FormData {
-  username: string,
-  password: string
-}
+const ErrorMessage = styled.p `
+  font-size: 0.8rem;
+  color: red;
+` 
 
 const LoginForm = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const {isLogged, isLoading, userInfo, errorMessage} = useAppSelector(state => state.auth)
-  const { register, handleSubmit, trigger, reset, formState: {errors, isSubmitting} } = useForm<FormData>();
+  const { register, handleSubmit, trigger, reset, formState: {errors, isSubmitting} } = useForm<ParamsLogin>();
   const { addToast, removeAllToasts } = useToasts();
 
-
-  console.log(userInfo)
-  console.log(errorMessage)
-
   const onSubmit = handleSubmit(async(data) => {
-    dispatch(userLogin(data))
+    try {
+      const result = await dispatch(userLogin(data)).unwrap()
+      console.log(result)
+      if (result.token) {
+        router.push('/checkout')
+      }
+    } catch (error) {
+      console.log(error)
+    }
   })
 
   const validate_email_field = {
@@ -68,7 +72,3 @@ const LoginForm = () => {
 
 export default LoginForm
 
-const ErrorMessage = styled.p `
-  font-size: 0.8rem;
-  color: red;
-` 

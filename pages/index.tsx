@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import SliderBanner from '../components/home/slider-banner'
 import GridInner from '../components/home/grid-inner'
+import withAuth from '../HOCs/withAuth'
 
 
 const Home: NextPage = () => {
@@ -20,4 +21,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default withAuth(Home)

@@ -7,6 +7,7 @@ import Loading from '../components/loading';
 import LoopFaq from "../components/partials/loop-faq";
 import BottomButton from "../components/partials/bottom-button";
 import PageContent from "../components/partials/page-content";
+import withAuth from "../HOCs/withAuth";
 import { PageMeta, IFaq} from "../interfaces/page";
 
 
@@ -77,4 +78,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default Faq;
+export default withAuth(Faq);

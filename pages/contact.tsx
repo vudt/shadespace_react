@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import BreadCrumb from "../components/partials/breadcrumb";
 import PageContent from "../components/partials/page-content";
 import ContactForm from "../components/forms/contact-form";
+import withAuth from "../HOCs/withAuth";
 import MetaTag from "../components/meta-tag";
 
 const Contact: NextPage = () => {
@@ -21,4 +22,4 @@ const Contact: NextPage = () => {
 }
 
 
-export default Contact;
+export default withAuth(Contact);

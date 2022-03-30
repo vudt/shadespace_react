@@ -7,6 +7,7 @@ import PageContent from "../../components/partials/page-content";
 import Loading from '../../components/loading';
 import BottomButton from "../../components/partials/bottom-button";
 import { PageMeta } from "../../interfaces/page";
+import withAuth from "../../HOCs/withAuth";
 import MetaTag from "../../components/meta-tag";
 
 
@@ -75,4 +76,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default Page;
+export default withAuth(Page);

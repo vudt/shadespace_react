@@ -12,7 +12,6 @@ const Navigation = () => {
   const [classMenu, setClassMenu] = useState('')
   const dispatch = useAppDispatch()
 
-  console.log(userInfo)
 
   useEffect(() => {
     if (data.length > 0) return 
@@ -20,7 +19,7 @@ const Navigation = () => {
   }, [])
 
   useEffect(() => {
-    setDisplayName(userInfo.user_display_name)
+    setDisplayName(userInfo.user_display_name!)
   }, [userInfo])
 
   useEffect(() => {
@@ -37,7 +36,7 @@ const Navigation = () => {
 
   const logOut = () => {
     dispatch(logout())
-    dispatch(closeNav(false))
+    // dispatch(closeNav(false))
   }
 
   if (data.length == 0) return null
@@ -48,7 +47,7 @@ const Navigation = () => {
         <h3 className="menu-header">
           {displayName ? (
             <>
-              <span>Hi, vudang</span>
+              <span>Hi, {displayName}</span>
               <span onClick={() => logOut()}>Logout</span>
             </>
           ): (

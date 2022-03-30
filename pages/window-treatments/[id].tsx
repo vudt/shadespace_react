@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import Head from 'next/head';
+import React from "react";
 import type { NextPage } from 'next'
 import pageAPI from "../../services/page";
 import useFetchData from "../../hooks/fetch-data";
 import Loading from '../../components/loading';
 import BreadCrumb from "../../components/partials/breadcrumb";
 import PageContent from "../../components/partials/page-content";
-import { GridItem, PageMeta } from "../../interfaces/page";
+import { PageMeta } from "../../interfaces/page";
 import MetaTag from "../../components/meta-tag";
 import BottomButton from "../../components/partials/bottom-button";
+import withAuth from "../../HOCs/withAuth";
 import GridBorder from "../../components/partials/grid-border";
 
 interface PageProps {
@@ -23,19 +23,6 @@ const WindowTreatMentItem: NextPage<PageProps> = ({id, pageMeta}) => {
     {name: 'Window Treatments', link: '/window-treatments'},
     {name: pageMeta?.post_title, link: ''}
   ]
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const fetchUrl: string = `api/app/get_term_window_treatments?pageid=${id}`
-  //     const response = await pageAPI.request(fetchUrl)
-  //     if (response.data) {
-  //       const replaceData = JSON.parse(response.data).map((item: GridItem, index: number) => {
-  //         return {...item, link: `/category-collection/${id}/${item.id}`}
-  //       })
-  //       setListItems(replaceData)
-  //     }
-  //   })()
-  // }, [])
 
   if (!listItems.data || listItems.isFetching) {
     return (
@@ -77,4 +64,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default WindowTreatMentItem
+export default withAuth(WindowTreatMentItem)

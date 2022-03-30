@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { removeCartItem } from "../../redux/cartSlice";
 import Modal from 'react-modal';
 import LoginForm from "../forms/login-form";
+import { clearError } from "../../redux/authSlice";
 import { CartData } from "../../interfaces/cart";
+import { useRouter } from "next/router";
 
 const customStyles = {
   content: {
@@ -21,10 +23,10 @@ const customStyles = {
 Modal.setAppElement('#__next');
 
 const LoopCartItem = (props: {cart: CartData}) => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const [showModal, setShowModal] = useState<boolean>(false)
-  console.log(props.cart)
-
+  
   const renderCart = () => {
     return props.cart.items.map((item, key) => (
       <div key={key} className="item-col-2 item-grid cart-item">
@@ -53,21 +55,12 @@ const LoopCartItem = (props: {cart: CartData}) => {
   }
 
   const beforeSendSwatches = () => {
-    const accessToken = sessionStorage.getItem('accessToken')
+    const accessToken = sessionStorage.getItem('token')
     if (!accessToken) {
-      // show popup login
-      console.log('popup')
       setShowModal(true)
     } else {
-      // redirect checkout
-      console.log('checkout')
+      router.push('/checkout')
     }
-  }
-
-  
-
-  function openModal() {
-    setShowModal(true);
   }
 
   function afterOpenModal() {
@@ -75,10 +68,9 @@ const LoopCartItem = (props: {cart: CartData}) => {
   }
 
   function closeModal() {
+    dispatch(clearError())
     setShowModal(false);
   }
-
-  console.log(showModal)
 
   return (
     <div className="section">
