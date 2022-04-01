@@ -12,11 +12,10 @@ import { PageMeta, IFaq} from "../interfaces/page";
 
 
 interface PageProps {
-  id: number,
   page_meta: PageMeta
 }
 
-const Faq: NextPage<PageProps> = ({id, page_meta}) => {
+const Faq: NextPage<PageProps> = ({page_meta}) => {
   const [listFaq, setListFaq] = useState<IFaq[]>([])
   const breadcrumb = [
     {name: 'Home', link: '/mobile'},
@@ -31,7 +30,7 @@ const Faq: NextPage<PageProps> = ({id, page_meta}) => {
         setListFaq(JSON.parse(response.data))
       }
     })()
-  }, [id])
+  }, [])
 
   
 
@@ -71,10 +70,7 @@ export async function getServerSideProps(context: any) {
     data = JSON.parse(response.data)
   }
   return {
-    props: {
-      id: 0,
-      page_meta: data
-    }
+    props: {page_meta: data}
   }
 }
 

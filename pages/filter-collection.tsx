@@ -8,6 +8,7 @@ import useFetchData from "../hooks/fetch-data";
 import { useRouter } from "next/router";
 import styled from 'styled-components';
 import withAuth from "../HOCs/withAuth";
+import SPAlert from "../components/error-message";
 import LoopFilterCollection from "../components/partials/loop-filter-collection";
 
 const FilterCollection: NextPage = () => {
@@ -32,25 +33,11 @@ const FilterCollection: NextPage = () => {
       {collections.data.length > 0 ? (
         <LoopFilterCollection data={collections.data} />
       ) : (
-        <VAlert>Collection not found.</VAlert>
+        <SPAlert text="Collection not found." />
       )}
       <BottomButton />
     </>
   )
 }
-
-const VAlert = styled.div `
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  width: 95%;
-  margin: 4% auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
-`
 
 export default withAuth(FilterCollection)

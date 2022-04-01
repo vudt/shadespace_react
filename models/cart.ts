@@ -15,7 +15,7 @@ interface ICart {
 
 export class Cart implements ICart {
   
-  public data: CartData
+  data: CartData
 
   constructor(cart: CartData) {
     this.data = {
@@ -24,6 +24,22 @@ export class Cart implements ICart {
       delivery_address: cart.delivery_address,
       price: cart.price
     }
+  }
+
+  static initializeData(): CartData {
+    const cart = {
+      items: [],
+      payment_method: null,
+      delivery_address: null,
+      price: {
+        original_price: 0,
+        final_price: 0,
+        delivery_fee: 0,
+        discount: 0
+      }
+    }
+    localStorage.setItem('cart', JSON.stringify(cart))
+    return cart
   }
 
   addToCart(item: SampleItem, quantity: number): CartData {
@@ -56,22 +72,6 @@ export class Cart implements ICart {
       price: item.price,
       thumbnail: item.thumb
     }
-  }
-
-  static initializeData(): CartData {
-    const cart = {
-      items: [],
-      payment_method: null,
-      delivery_address: null,
-      price: {
-        original_price: 0,
-        final_price: 0,
-        delivery_fee: 0,
-        discount: 0
-      }
-    }
-    localStorage.setItem('cart', JSON.stringify(cart))
-    return cart
   }
 
   totalQuantity(): number {

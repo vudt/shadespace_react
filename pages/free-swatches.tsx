@@ -9,6 +9,7 @@ import pageAPI from "../services/page";
 import Loading from '../components/loading';
 import BottomButton from "../components/partials/bottom-button";
 import withAuth from "../HOCs/withAuth";
+import SPAlert from "../components/error-message";
 import { useToasts } from "react-toast-notifications";
 
 interface PageProps {
@@ -73,7 +74,7 @@ const FreeSwatches: NextPage<PageProps> = (props) => {
       {listItems.data.length > 0 ? (
         <GridBorder listItems={listItems.data} />
       ) : (
-        <p>Data not found.</p>
+        <SPAlert text="Data not found." />
       )}
       <BottomButton />
     </>

@@ -33,7 +33,6 @@ export const navigationSlice = createSlice({
   initialState,
   reducers: {
     closeNav: (state, action) => {
-      console.log('closeNav')
       state.active = action.payload
     },
     toggleNav: (state) => {

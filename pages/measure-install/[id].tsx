@@ -9,6 +9,7 @@ import GridMeasureInstall from "../../components/partials/grid-measure-install";
 import BottomButton from "../../components/partials/bottom-button";
 import { PageMeta, IMeasureMent } from "../../interfaces/page";
 import withAuth from "../../HOCs/withAuth";
+import SPAlert from "../../components/error-message";
 import MetaTag from "../../components/meta-tag";
 
 
@@ -46,7 +47,7 @@ const MeasureInstall: NextPage<PageProps> = ({id, page_meta}) => {
         { listMeasurement.data ? (
           loopMeasurement(listMeasurement.data) 
         ) : (
-          <p>Data not found.</p>
+          <SPAlert text="Data not found." />
         )}
         </div>
       </div>

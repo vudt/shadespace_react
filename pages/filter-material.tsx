@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import LoopMaterial from "../components/partials/loop-material";
 import { TermItem } from "../interfaces/page";
 import withAuth from "../HOCs/withAuth";
+import SPAlert from "../components/error-message";
 import pageAPI from "../services/page";
 
 interface PageProps {
@@ -21,8 +22,6 @@ const FilterMaterial: NextPage<PageProps> = (props) => {
   const router = useRouter()
   const api_filter_material  = '/api/app/get_tcb_re_group_collection_material'
   const materials = useFetchData(api_filter_material, 'FILTER_METERIAL', router.query)
-  // const api_get_term = '/api/app/get_re_group_collection_term'
-  // const term = useFetchData(api_get_term, 'FETCH_TERM', router.query)
 
   const breadcrumb = [
     {name: "Free Swatches", link: '/free-swatches'},
@@ -46,26 +45,12 @@ const FilterMaterial: NextPage<PageProps> = (props) => {
       {materials.data.length > 0 ? (
         <LoopMaterial data={materials.data} />
       ) : (
-        <VAlert>Material not found.</VAlert>
+        <SPAlert text="Material not found." />
       )}
       <BottomButton />
     </>
   )
 }
-
-const VAlert = styled.div `
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  width: 95%;
-  margin: 4% auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
-`
 
 export async function getServerSideProps(context: any) {
   const url_api: string = `/api/app/get_re_group_collection_term?termid=${context.query.term_id}`
