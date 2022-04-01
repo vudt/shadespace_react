@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import type { NextPage } from 'next'
 import BreadCrumb from "../components/partials/breadcrumb";
 import PageContent from "../components/partials/page-content";
 import TrackOrderForm from "../components/forms/track-order-form";
+import withAuth from "../HOCs/withAuth";
 import MetaTag from "../components/meta-tag";
 
 const TrackYourOrder: NextPage = () => {
-  const breadcrumb = [
-    {name: 'Home', link: '/mobile'},
-    {name: "Track Your Order", link: ''}
-  ]
+  const breadcrumb = [{name: "Track Your Order", link: ''}]
   
   return (
     <>
@@ -22,4 +20,4 @@ const TrackYourOrder: NextPage = () => {
 }
 
 
-export default TrackYourOrder;
+export default withAuth(TrackYourOrder);

@@ -1,6 +1,5 @@
 import { SampleItem } from "../interfaces/material";
 import { CartData, CartItem } from "../interfaces/cart";
-import cartSlice from "../redux/cartSlice";
 
 interface ICart {
   data: CartData,
@@ -57,6 +56,22 @@ export class Cart implements ICart {
       price: item.price,
       thumbnail: item.thumb
     }
+  }
+
+  static initializeData(): CartData {
+    const cart = {
+      items: [],
+      payment_method: null,
+      delivery_address: null,
+      price: {
+        original_price: 0,
+        final_price: 0,
+        delivery_fee: 0,
+        discount: 0
+      }
+    }
+    localStorage.setItem('cart', JSON.stringify(cart))
+    return cart
   }
 
   totalQuantity(): number {

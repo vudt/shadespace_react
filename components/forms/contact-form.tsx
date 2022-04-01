@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import pageAPI from "../../services/page";
 import { useToasts } from 'react-toast-notifications';
 import LoadingSpin from "react-loading-spin";
+import withAuth from "../../HOCs/withAuth";
 import lodash from "lodash"
 
 
@@ -13,7 +14,7 @@ interface FormData {
 }
 
 const ContactForm = () => {
-  const { register, handleSubmit, trigger, reset, formState: {errors, isSubmitting} } = useForm<FormData>();
+  const { register, handleSubmit, trigger, reset, formState: {errors, isSubmitting, submitCount} } = useForm<FormData>();
   const { addToast, removeAllToasts } = useToasts();
   
   const onSubmit = handleSubmit(async(data) => {
@@ -37,20 +38,19 @@ const ContactForm = () => {
   })
 
   useEffect(() => {
-    trigger();
-  }, [trigger]);
+    removeAllToasts()
+    if (errors) {
+      lodash.forEach(errors, (item) => {
+        if (item?.message) {
+          addToast(item.message, {appearance: "error", autoDismiss: true})
+          return false
+        }
+      })
+    }
+  }, [submitCount]);
 
   const triggerValidate = () => {  
-    removeAllToasts()
-    if (lodash.isEmpty(errors)) {
-      return false
-    }
-    lodash.forEach(errors, function(value, key) {
-      if (value?.message) {
-        addToast(value.message, {appearance: "error", autoDismiss: true})
-        return false
-      }
-    })
+    trigger(["your-name", "your-email", "your-message"])
   }
 
   const validate_text_field = (name: string) => {
@@ -72,7 +72,6 @@ const ContactForm = () => {
   }
 
   return (
-
     <div className="container page-desc">
       <form onSubmit={onSubmit}  className="form">
         <div className="form-group">
@@ -88,13 +87,15 @@ const ContactForm = () => {
           <textarea {...register("your-message", validate_text_field('Your message'))} className="form-control h-75" />
         </div>
         <button type="submit" disabled={isSubmitting} onClick={triggerValidate} className="btn btn-default">
-          SEND  {isSubmitting &&  <LoadingSpin size="18px" width="2px" primaryColor="#fff"></LoadingSpin>} 
+          { isSubmitting ? (
+            <LoadingSpin size="18px" width="2px" primaryColor="#fff"></LoadingSpin>
+          ) : (
+            'SEND'
+          )}
         </button>
       </form>
     </div>
   )
 }
 
-
-
-export default ContactForm
+export default withAuth(ContactForm)

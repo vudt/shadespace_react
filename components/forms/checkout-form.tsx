@@ -1,10 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import pageAPI from "../../services/page";
-import withAuth from "../../HOCs/withAuth";
+import OrderService from "../../services/order";
+import { useAppSelector, useAppDispatch } from "../../redux/store";
+import { emptyCart } from "../../redux/cartSlice";
 import { useToasts } from 'react-toast-notifications';
+import { Cart } from "../../models/cart";
 import LoadingSpin from "react-loading-spin";
+import Modal from 'react-modal';
+import Link from "next/link";
 import lodash from "lodash"
+import { useRouter } from "next/router";
+
+const customStyles = {
+  content: {
+    width: '75%',
+    top: '20%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    padding: '15px'
+  },
+};
+
+Modal.setAppElement('#__next');
 
 interface FormData {
   first_name: string,
@@ -12,18 +33,56 @@ interface FormData {
   company_name: string,
   email: string,
   phone: string,
-  address: string,
-  city: string,
-  postal_code: string
+  address_1: string,
+  country: string,
+  postcode: string
 }
 
-const CheckoutForm = () => {
-  const { register, handleSubmit, trigger, reset, formState: {errors, isSubmitting} } = useForm<FormData>();
-  const { addToast, removeAllToasts } = useToasts();
+interface TypeProps {
+  setRedirect:(value: boolean) => void
+}
+
+const CheckoutForm = (props: TypeProps) => {
+  const { register, handleSubmit, trigger, reset, formState: {errors, isSubmitting, submitCount} } = useForm<FormData>();
+  const {cart} = useAppSelector(state => state)
+  const {userInfo} = useAppSelector(state => state.auth)
+  const [showModal, setShowModal] = useState<boolean>(false)
+  const { addToast, removeAllToasts } = useToasts()
+  const router = useRouter()
+  const dispatch = useAppDispatch()
 
   const onSubmit = handleSubmit(async(data) => {
-    console.log(data)
+    const paramsOrder = OrderService.prepareParam(cart.data, userInfo, data)
+    if (paramsOrder) {
+      const response = await pageAPI.request("api/app/create_order", {
+        method: 'POST', 
+        data: paramsOrder, 
+        headers: {'Authorization': userInfo.token}
+      })
+
+      if (response.error) {
+        addToast('There has been a critical error on this website…arn more about troubleshooting WordPress.', { appearance: 'error', autoDismiss: true });
+        return false
+      }
+
+      props.setRedirect(false)
+      reset()
+      dispatch(emptyCart())
+      setShowModal(true)
+    }
   })
+
+  useEffect(() => {
+    removeAllToasts()
+    if (errors) {
+      lodash.forEach(errors, (item) => {
+        if (item?.message) {
+          addToast(item.message, {appearance: "error", autoDismiss: true})
+          return false
+        }
+      })
+    }
+  }, [submitCount])
 
   const validate_text_field = (name: string) => {
     return {
@@ -43,21 +102,21 @@ const CheckoutForm = () => {
     }
   }
 
-  useEffect(() => {
-    trigger();
-  }, [trigger]);
-
   const triggerValidate = () => {  
-    removeAllToasts()
-    if (lodash.isEmpty(errors)) {
-      return false
-    }
-    lodash.forEach(errors, (item) => {
-      if (item?.message) {
-        addToast(item.message, {appearance: "error", autoDismiss: true})
-        return false
-      }
-    })
+    trigger([
+      "first_name", 
+      "last_name", 
+      "company_name", 
+      "email", 
+      "phone", 
+      "address_1", 
+      "country", 
+      "postcode"
+    ])
+  }
+
+  function closeModal() {
+    router.push('/free-swatches')
   }
 
   return (
@@ -85,20 +144,39 @@ const CheckoutForm = () => {
         </div>
         <div className="form-group">
           <label>Address *</label>
-          <input {...register("address", validate_text_field('Address'))} className="form-control" />
+          <input {...register("address_1", validate_text_field('Address'))} className="form-control" />
         </div>
         <div className="form-group">
           <label>Town / City *</label>
-          <input {...register("address", validate_text_field('Town / City'))} className="form-control" />
+          <input {...register("country", validate_text_field('Town / City'))} className="form-control" />
         </div>
         <div className="form-group">
           <label>Postcode / Zip *</label>
-          <input {...register("address", validate_text_field('Postcode / Zip'))} className="form-control" />
+          <input {...register("postcode", validate_text_field('Postcode / Zip'))} className="form-control" />
         </div>
         <button type="submit" disabled={isSubmitting} onClick={triggerValidate} className="btn btn-default">
-          SUBMIT ORDER  {isSubmitting &&  <LoadingSpin size="18px" width="2px" primaryColor="#fff"></LoadingSpin>} 
+          { isSubmitting ? (
+            <LoadingSpin size="18px" width="2px" primaryColor="#fff"></LoadingSpin>
+          ) : (
+            'SUBMIT ORDER ' 
+          ) }
         </button>
       </form>
+      
+      <Modal
+        isOpen={showModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Thank you for your order"
+      >
+          <h3 style={{textAlign: "center"}}>THANK YOU FOR YOUR ORDER</h3>
+          <div className="form">
+            <Link href="/free-swatches">
+              <button className="btn btn-default">Continue Shopping</button>
+            </Link>
+          </div>
+      </Modal>
+
     </div>
   )
 }

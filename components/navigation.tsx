@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { logout } from "../redux/authSlice";
-import { closeNav } from "../redux/navigationSlice";
 import { fetchNavigation } from "../redux/navigationSlice";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Navigation = () => {
   const {active, data} = useAppSelector(state => state.navigation)
@@ -11,8 +11,8 @@ const Navigation = () => {
   const [displayName, setDisplayName] = useState<string>('')
   const [classMenu, setClassMenu] = useState('')
   const dispatch = useAppDispatch()
-
-
+  const router = useRouter()
+  
   useEffect(() => {
     if (data.length > 0) return 
     dispatch(fetchNavigation())
@@ -36,7 +36,7 @@ const Navigation = () => {
 
   const logOut = () => {
     dispatch(logout())
-    // dispatch(closeNav(false))
+    router.push(router.pathname)
   }
 
   if (data.length == 0) return null
@@ -47,7 +47,7 @@ const Navigation = () => {
         <h3 className="menu-header">
           {displayName ? (
             <>
-              <span>Hi, {displayName}</span>
+              <Link href='/order-history'><span>Hi, {displayName}</span></Link>
               <span onClick={() => logOut()}>Logout</span>
             </>
           ): (

@@ -1,5 +1,3 @@
-import React from "react";
-
 enum ActionTypes {
   FETCH_INIT = 'FETCH_INIT',
   FETCH_SUCCESS = 'FETCH_SUCCESS',
@@ -27,7 +25,6 @@ let initialState: TypeState = {
 const dataFetchReducer = (state = initialState, action: TypeAction) : TypeState => {
   switch (action.type) {
     case ActionTypes.FETCH_INIT: 
-      // return {...state, data: null, isFetching: true}
       return {...state, isFetching: true}
     case ActionTypes.FETCH_SUCCESS:
       return {...state, isFetching: false, data: action.payload}

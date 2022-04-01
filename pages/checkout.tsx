@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { NextPage } from 'next'
 import BreadCrumb from "../components/partials/breadcrumb";
 import PageContent from "../components/partials/page-content";
@@ -13,8 +13,10 @@ const Checkout: NextPage = () => {
   const { cart } = useAppSelector(state => state)
   const router = useRouter()
   const breadcrumb = [{name: "Checkout", link: ''}]  
+  const [isRedirect, setRedirect] = useState<boolean>(true)
+
   if (cart.data.items.length == 0) {
-    router.push('/cart')
+    if (isRedirect) router.push('/cart')
   }
 
   return (
@@ -22,19 +24,11 @@ const Checkout: NextPage = () => {
       <MetaTag title="Checkout - Shade Space" description="Checkout - Shade Space" />
       <BreadCrumb breadcrumb={breadcrumb} />
       <PageContent title="Checkout Form" />
-      <CheckoutForm />
+      <CheckoutForm setRedirect={setRedirect} />
     </>
   )
 }
 
-// export default withAuth(Checkout)({protected: true})
 export default withAuth(Checkout, true)
 
-// export async function getServerSideProps(context: any) {
-//   const token = sessionStorage.getItem('token')
-//   return {
-//     props: {
-//       token: token
-//     }
-//   }
-// }
+

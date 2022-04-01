@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import pageAPI from "../../services/page";
 import { useToasts } from 'react-toast-notifications';
 import LoadingSpin from "react-loading-spin";
-import { Order}  from "../../interfaces/order";
-// import styled from 'styled-components';
+import { Order as IOrder}  from "../../interfaces/order";
+import { Order} from "../../models/order";
 import moment from 'moment'
-import lodash from "lodash"
-import { format } from "path/posix";
 
 
 interface FormData {
@@ -15,7 +13,7 @@ interface FormData {
 }
 
 interface ISearchResult {
-  data: Order | null
+  data: IOrder | null
 }
 
 const TrackOrderForm = () => {
@@ -24,7 +22,7 @@ const TrackOrderForm = () => {
   const { addToast } = useToasts();
 
   const onSubmit = handleSubmit(async(data) => {
-    const response: {status: string, data?: string, message?: string} = await pageAPI.request(`api/app/track_your_order/?order_number=${data.order_number}`);
+    const response = await pageAPI.request(`api/app/track_your_order/?order_number=${data.order_number}`);
     if (response.data) {
       const formatData = JSON.parse(response.data)
       setResult({data: formatData.order})
@@ -34,34 +32,18 @@ const TrackOrderForm = () => {
     }
   })
 
-  const renderResult = (order: Order) => {
-    const countSwatches = order.line_items.reduce((sum, item) => {
-      let total = sum
-      if (item.price == '0.00') {
-        total = sum + item.quantity
-      }
-      return total
-    }, 0)
-
-    const countProducts = order.line_items.reduce((sum, item) => {
-      let total = sum
-      if (item.price != '0.00') {
-        total = sum + item.quantity
-      }
-      return total
-    }, 0)
+  const renderResult = (order: IOrder) => {
+    const orderModel = new Order(order)
+    const countSwatches = orderModel.countSwatches()
+    const countProducts = orderModel.countProduct()
+    const headingColumnText = ['ORDER NUMBER', 'STATUS', 'SWATCHES', 'PRODUCTS', 'TOTAL', 'DATE']
 
     return (
       <div className="search-result">
         <div className="wrap-result">
           <div className="order-body">
             <div className="order_line_item">
-              <div className="line_column border_b">ORDER NUMBER</div>
-              <div className="line_column border_b">STATUS</div>
-              <div className="line_column border_b">SWATCHES</div>
-              <div className="line_column border_b">PRODUCTS</div>
-              <div className="line_column border_b">TOTAL</div>
-              <div className="line_column border_b">DATE</div>
+              { headingColumnText.map(text => (<div className="line_column border_b">{text}</div>)) }
             </div>
             <div className="order_line_item border_b">
               <div className="line_column">{order.order_number}</div>
@@ -85,7 +67,11 @@ const TrackOrderForm = () => {
           <input {...register("order_number", {required: "Please input order number"})} className="form-control" />
         </div>
         <button type="submit" className="btn btn-default">
-          GO  {isSubmitting &&  <LoadingSpin size="18px" width="2px" primaryColor="#fff"></LoadingSpin>} 
+          {isSubmitting ? (
+            <LoadingSpin size="18px" width="2px" primaryColor="#fff"></LoadingSpin>
+          ) : (
+            'GO'
+          )}
         </button>
       </form>
       { result.data && renderResult(result.data) }

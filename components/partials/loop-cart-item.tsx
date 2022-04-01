@@ -29,7 +29,7 @@ const LoopCartItem = (props: {cart: CartData}) => {
   
   const renderCart = () => {
     return props.cart.items.map((item, key) => (
-      <div key={key} className="item-col-2 item-grid cart-item">
+      <div key={item.id} className="item-col-2 item-grid cart-item">
         <a className="full-img">
           <img src={item.thumbnail} />
         </a>

@@ -7,9 +7,7 @@ import withAuth from "../HOCs/withAuth";
 import MetaTag from "../components/meta-tag";
 
 const Contact: NextPage = () => {
-  const breadcrumb = [
-    {name: "Contact", link: ''}
-  ]
+  const breadcrumb = [{name: "Contact", link: ''}]
   
   return (
     <>

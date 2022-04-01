@@ -7,6 +7,7 @@ export interface AuthState {
 
 export interface UserInfo {
   token: string | null,
+  id: number | null,
   user_email: string | null,
   user_nicename: string | null,
   user_display_name: string | null

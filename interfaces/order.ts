@@ -44,3 +44,18 @@ export interface LineItem {
   name: string
   sku?: string
 }
+
+export interface ParamLineItem{
+  product_id: number,
+  quantity: number
+}
+
+export interface ParamsOrder {
+  customer_id: number,
+  payment_method: string,
+  payment_method_title: string,
+  set_paid: boolean,
+  billing_address: BillingInfo,
+  shipping_address: BillingInfo,
+  line_items: ParamLineItem[]
+}
