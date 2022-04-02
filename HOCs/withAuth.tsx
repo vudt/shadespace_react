@@ -10,34 +10,33 @@ const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protec
   const componentWithAuth = (props: T) => {
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const [token, setToken] = useState<string>('');
-    const {isLogged, isLoading, userInfo, errorMessage} = useAppSelector(state => state.auth)
+    const [prevent, setPrevent] = useState<boolean>(true);
+    const {isLogged, isLoading, userInfo} = useAppSelector(state => state.auth)
 
     useEffect(() => {
       const accessToken = sessionStorage.getItem('token')
       if (protect) {
         if (!accessToken) {
           router.push('/cart')
-        } else {
+        } else if(accessToken !== userInfo.token){
           dispatch(getUserInfo())
         }
-      } else {
-        if (accessToken && !isLogged) {
-          dispatch(getUserInfo())
-        } 
+      } else if (accessToken && !isLogged) {
+        dispatch(getUserInfo())
       }
     }, [router.query])
 
     useEffect(() => {
-      console.log('subcribe')
-      if (userInfo.token) {
-        setToken(userInfo.token)
-      } else if (errorMessage) {
-        if (protect) router.push('/cart')
-      } 
-    }, [userInfo, errorMessage])
+      if (protect) {
+        if (isLogged) {
+          setPrevent(false)
+        } else {
+          router.push('/cart')
+        }
+      }
+    }, [isLogged])
 
-    if ((!token || isLoading) && protect) {
+    if ((isLoading || prevent) && protect) {
       return (
         <>
           <MetaTag />

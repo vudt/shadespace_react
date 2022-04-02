@@ -8,8 +8,8 @@ import LoopFaq from "../components/partials/loop-faq";
 import BottomButton from "../components/partials/bottom-button";
 import PageContent from "../components/partials/page-content";
 import withAuth from "../HOCs/withAuth";
+import MetaTag from "../components/meta-tag";
 import { PageMeta, IFaq} from "../interfaces/page";
-
 
 interface PageProps {
   page_meta: PageMeta
@@ -17,10 +17,7 @@ interface PageProps {
 
 const Faq: NextPage<PageProps> = ({page_meta}) => {
   const [listFaq, setListFaq] = useState<IFaq[]>([])
-  const breadcrumb = [
-    {name: 'Home', link: '/mobile'},
-    {name: page_meta.post_title, link: ''}
-  ]
+  const breadcrumb = [{name: page_meta.post_title, link: ''}]
 
   useEffect(() => {
     (async () => {
@@ -32,38 +29,19 @@ const Faq: NextPage<PageProps> = ({page_meta}) => {
     })()
   }, [])
 
-  
-
-  if (listFaq.length == 0) {
-    return (
-      <>
-        <Head>
-          <title>{page_meta.post_title} - Shade Space</title>
-          <meta name="description" content={page_meta.post_title} />
-        </Head>
-        <Loading />
-        <BreadCrumb breadcrumb={breadcrumb} />
-        <PageContent title={page_meta.post_title} />
-      </>
-    )
-  }
-  
   return (
     <>
-      <Head>
-        <title>{page_meta.post_title} - Shade Space</title>
-        <meta name="description" content={page_meta.post_title} />
-      </Head>
+      <MetaTag title={page_meta.post_title} description={page_meta.post_title} />
       <BreadCrumb breadcrumb={breadcrumb} />
       <PageContent title={page_meta.post_title} />
-      <LoopFaq data={listFaq} />
+      {listFaq.length === 0 ? (<Loading />): (<LoopFaq data={listFaq} />)}
       <BottomButton />
     </>
   )
 }
 
 export async function getServerSideProps(context: any) {
-  const url_api: string = `api/app/get_page_detail/?pageid=1024`
+  const url_api = `api/app/get_page_detail/?pageid=1024`
   const response = await pageAPI.request(url_api)
   let data: any = null
   if (response.data) {

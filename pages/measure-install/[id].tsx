@@ -14,11 +14,10 @@ import MetaTag from "../../components/meta-tag";
 
 
 interface PageProps {
-  id: number,
   page_meta: PageMeta
 }
 
-const MeasureInstall: NextPage<PageProps> = ({id, page_meta}) => {
+const MeasureInstall: NextPage<PageProps> = ({page_meta}) => {
   const breadcrumb = [{name: page_meta.post_title, link: ''}]
   const listMeasurement = useFetchData('api/app/get_measure_install_info', 'FETCH_MEASURE_INFO')
 
@@ -31,7 +30,7 @@ const MeasureInstall: NextPage<PageProps> = ({id, page_meta}) => {
   if (!listMeasurement.data) {
     return (
       <>
-        <MetaTag />
+        <MetaTag title={page_meta?.post_title} description={page_meta?.post_title} />
         <Loading />
       </>
     )
@@ -65,7 +64,6 @@ export async function getServerSideProps(context: any) {
   }
   return {
     props: {
-      id: context.params.id,
       page_meta: data
     }
   }

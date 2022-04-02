@@ -15,9 +15,12 @@ const Checkout: NextPage = () => {
   const breadcrumb = [{name: "Checkout", link: ''}]  
   const [isRedirect, setRedirect] = useState<boolean>(true)
 
-  if (cart.data.items.length == 0) {
-    if (isRedirect) router.push('/cart')
-  }
+  useEffect(() => {
+    if (cart.data.items.length == 0) {
+      console.log('xx')
+      if (isRedirect) router.push('/cart')
+    }
+  }, [])
 
   return (
     <>

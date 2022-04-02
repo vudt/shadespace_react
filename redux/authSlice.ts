@@ -69,7 +69,7 @@ const authSlice = createSlice({
     }),
     builder.addCase(userLogin.fulfilled, (state, action) => {
       sessionStorage.setItem('token', action.payload.token!)
-      return {...state, isLogged: true, isLoading: true, userInfo: action.payload, errorMessage: ''}
+      return {...state, isLogged: true, isLoading: false, userInfo: action.payload, errorMessage: ''}
     }),
     builder.addCase(userLogin.rejected, (state, action) => {
       sessionStorage.removeItem('token')

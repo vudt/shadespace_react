@@ -21,41 +21,17 @@ const Page: NextPage<PageProps> = ({id, pageMeta}) => {
   const url_page_info = `api/app/get_page_info`
   const pageContent = useFetchData(url_page_info, 'FETCH_PAGE', id)
   const breadcrumb = [{name: pageMeta.post_title, link: ''}]
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const url_page_detail = `api/app/get_page_detail/?pageid=${id}`
-  //     const res_page_detail = pageAPI.request(url_page_detail)
-  //     const url_page_info = `api/app/get_page_info/?pageid=${id}`
-  //     const res_page_info = pageAPI.request(url_page_info)
-  //     const response = await Promise.all([res_page_detail, res_page_info])
-  //     console.log(response)
-  //     if (response) {
-  //       if (response[0].data) {
-  //         setPageMeta(JSON.parse(response[0].data))
-  //       }
-  //       if (response[1].data) {
-  //         setPageContent(JSON.parse(response[1].data))
-  //       }
-  //     }
-  //   })()
-  // }, [id])
-
-
-  if (pageContent.isFetching) {
-    return (
-      <>
-        <MetaTag title={pageMeta.post_title} description={pageMeta.post_title} />
-        <Loading />
-      </>
-    )
-  }
   
   return (
     <>
       <MetaTag title={pageMeta.post_title} description={pageMeta.post_title} />
       <BreadCrumb breadcrumb={breadcrumb} />
-      <PageContent title={pageMeta.post_title} description={pageMeta.post_content} content={pageContent.data} />
+      { pageContent.isFetching ? (
+        <Loading />
+      ) : (
+        <PageContent title={pageMeta.post_title} description={pageMeta.post_content} content={pageContent.data} />
+      )}
+      
       <BottomButton />
     </>
   )

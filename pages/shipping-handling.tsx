@@ -8,7 +8,6 @@ import MetaTag from "../components/meta-tag";
 import { PageMeta } from "../interfaces/page";
 
 interface PageProps {
-  id: number,
   page_meta: PageMeta
 }
 
@@ -20,12 +19,9 @@ interface ContentState {
   }
 }
 
-const ShippingHandling: NextPage<PageProps> = ({id, page_meta}) => {
+const ShippingHandling: NextPage<PageProps> = ({page_meta}) => {
   const [content, setPageContent] = useState<ContentState[]>([])
-  const breadcrumb = [
-    {name: 'Home', link: '/mobile'},
-    {name: page_meta.post_title, link: ''}
-  ]
+  const breadcrumb = [{name: page_meta.post_title, link: ''}]
 
   useEffect(() => {
     (async () => {
@@ -37,11 +33,11 @@ const ShippingHandling: NextPage<PageProps> = ({id, page_meta}) => {
     })()
   }, [])
 
-  const loopContent = () => {
+  const LoopContent = () => {
     return content.map((data_item, index) => {
       if (data_item.img && data_item.item) {
         return (
-          <div key={index} className="wrap-generic ng-scope">
+          <div key={index} className="wrap-generic">
             <div style={{lineHeight: 'initial'}} dangerouslySetInnerHTML={{__html: data_item.img}}></div>
             <div className="product-info">
               <h3>{data_item.item.title}</h3>
@@ -52,26 +48,21 @@ const ShippingHandling: NextPage<PageProps> = ({id, page_meta}) => {
       }
     })
   }
-
-  if (content.length == 0) {
-    return (
-      <>
-        <MetaTag />
-        <Loading />
-      </>
-    )
-  }
     
   return (
     <>
       <MetaTag title={page_meta.post_title} description={page_meta.post_title} />
       <BreadCrumb breadcrumb={breadcrumb} />
       <PageContent title={page_meta.post_title} description={page_meta.post_content}  />
-      <div className="content-page">
-        <div className="container">
-          { loopContent() }
+      {content.length == 0 ? (
+        <Loading />
+      ) : (
+        <div className="content-page">
+          <div className="container">
+            { LoopContent() }
+          </div>
         </div>
-      </div>
+      )}
     </>
   )
 }
@@ -86,7 +77,6 @@ export async function getServerSideProps(context: any) {
   }
   return {
     props: {
-      id: 0,
       page_meta: data
     }
   }
