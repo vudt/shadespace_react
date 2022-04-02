@@ -87,3 +87,11 @@ export interface IFaq {
   term: TermItem,
   posts: FaqItem[]
 }
+
+export interface IContentShipping {
+  img?: string
+  item?: {
+    title: string,
+    description: string
+  }
+}
