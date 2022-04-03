@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import type { NextPage } from 'next'
 import pageAPI from "../../services/page";
 import BreadCrumb from "../../components/partials/breadcrumb";
@@ -9,58 +9,30 @@ import GridPortfolio from "../../components/partials/grid-portfolio";
 import { Portfolio, PageMeta } from "../../interfaces/page";
 import MetaTag from "../../components/meta-tag";
 import withAuth from "../../HOCs/withAuth";
-import { useToasts } from "react-toast-notifications";
+import useFetchData from "../../hooks/fetch-data";
+import SPAlert from "../../components/error-message";
 
 interface PageProps {
-  id: number,
   page_meta: PageMeta
 }
 
-interface PortfolioState {
-  isFetching: boolean,
-  data: Portfolio[] | null,
-  message?: string
-}
+const ArchivePortfolio: NextPage<PageProps> = ({page_meta}) => {
+  const breadcrumb = [{name: page_meta?.post_title, link: ''}]
+  const response = useFetchData('api/app/get_all_term_category_collection', 'LIST_PORTFOLIO')
 
-const ArchivePortfolio: NextPage<PageProps> = ({id, page_meta}) => {
-  const { addToast } = useToasts();
-  const initialState: PortfolioState = { isFetching: false, data: null }
-  const [listPortfolio, setPortfolio] = useState<PortfolioState>(initialState)
-  const breadcrumb = [
-    {name: page_meta?.post_title, link: ''}
-  ]
-
-  useEffect(() => {
-    (async () => {
-      const fetchUrl: string = `api/app/get_all_term_category_collection`
-      const response = await pageAPI.request(fetchUrl)
-      if (response.error) {
-        addToast(response.description, { appearance: 'error', autoDismiss: false });
-      } else {
-        setPortfolio({...initialState, isFetching: false, data: JSON.parse(response.data)})
-      } 
-    })()
-  }, [])
-
-  if (listPortfolio.isFetching || !listPortfolio.data) {
-    return (
-      <>
-        <MetaTag title={page_meta?.post_title} description={page_meta?.post_title} />
-        <Loading />
-      </>
-    )
+  const DisplayContent = () => {
+    if (response.isFetching || !response.data) return <Loading />
+    const listItems: Portfolio[] = response.data
+    if (listItems.length === 0) return <SPAlert text="Data not found." />
+    return <GridPortfolio data={listItems} />
   }
-  
+
   return (
     <>
       <MetaTag title={page_meta?.post_title} description={page_meta?.post_title} />
       <BreadCrumb breadcrumb={breadcrumb} />
       <PageContent title={page_meta?.post_title} description={page_meta?.post_content} />
-      { listPortfolio.data ? (
-        <GridPortfolio data={listPortfolio.data} />
-      ) : (
-        <p>Not Found</p>
-      )}
+      <DisplayContent />
       <BottomButton />
     </>
   )

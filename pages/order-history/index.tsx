@@ -25,9 +25,7 @@ const OrderHistory: NextPage = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await pageAPI.request('api/app/order_history', {
-        headers: {'Authorization': userInfo.token}
-      })
+      const response = await pageAPI.request('api/app/order_history', {headers: {'Authorization': userInfo.token}})
       if (response.error) {
         addToast('There has been a critical error on this website…arn more about troubleshooting WordPress.', { appearance: 'error', autoDismiss: false });
       } else {

@@ -9,7 +9,7 @@ import PageContent from "../components/partials/page-content";
 import useFetchData from "../hooks/fetch-data";
 import withAuth from "../HOCs/withAuth";
 import MetaTag from "../components/meta-tag";
-import { PageMeta, IFaq} from "../interfaces/page";
+import {PageMeta, IFaq} from "../interfaces/page";
 import SPAlert from "../components/error-message";
 
 interface PageProps {
@@ -29,7 +29,7 @@ const Faq: NextPage<PageProps> = ({page_meta}) => {
 
   return (
     <>
-      <MetaTag title={`${page_meta.post_title} - Shade Space`} description={`${page_meta.post_title} - Shade Space`} />
+      <MetaTag title={page_meta.post_title} description={page_meta.post_title} />
       <BreadCrumb breadcrumb={breadcrumb} />
       <PageContent title={page_meta.post_title} />
       <DisplayContent />

@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   return (
     <>
     <Head>
-        <title>Shade Space | Singapore First Window Coverings E-Commerce Store</title>
+        <title>Shade Space - Singapore First Window Coverings E-Commerce Store</title>
         <meta name="description" content="Cheap Online Curtains & Blinds Supplier" />
     </Head>  
     <div id="home" className="section">

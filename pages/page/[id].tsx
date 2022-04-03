@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import type { NextPage } from 'next'
 import pageAPI from "../../services/page";
 import useFetchData from "../../hooks/fetch-data";
@@ -17,21 +17,19 @@ interface PageProps {
 }
 
 const Page: NextPage<PageProps> = ({id, pageMeta}) => {
-
-  const url_page_info = `api/app/get_page_info`
-  const pageContent = useFetchData(url_page_info, 'FETCH_PAGE', id)
   const breadcrumb = [{name: pageMeta.post_title, link: ''}]
+  const response = useFetchData(`api/app/get_page_info?pageid=${id}`, 'FETCH_PAGE', id)
   
+  const DisplayContent = () => {
+    if (response.isFetching) return <Loading />
+    return <PageContent title={pageMeta?.post_title} description={pageMeta?.post_content} content={response.data} />
+  }
+
   return (
     <>
       <MetaTag title={pageMeta.post_title} description={pageMeta.post_title} />
       <BreadCrumb breadcrumb={breadcrumb} />
-      { pageContent.isFetching ? (
-        <Loading />
-      ) : (
-        <PageContent title={pageMeta.post_title} description={pageMeta.post_content} content={pageContent.data} />
-      )}
-      
+      <DisplayContent />
       <BottomButton />
     </>
   )

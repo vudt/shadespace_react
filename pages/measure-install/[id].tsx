@@ -20,7 +20,7 @@ interface PageProps {
 const MeasureInstall: NextPage<PageProps> = ({page_meta}) => {
   const breadcrumb = [{name: page_meta.post_title, link: ''}]
   const listMeasurement = useFetchData('api/app/get_measure_install_info', 'FETCH_MEASURE_INFO')
-
+  
   const loopMeasurement = (arrData: IMeasureMent[]) => {
     return arrData.map((item, index) => (
       <GridMeasureInstall key={index} index={index} data={item} />

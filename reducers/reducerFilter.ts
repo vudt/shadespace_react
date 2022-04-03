@@ -11,7 +11,7 @@ interface TypeAction {
 
 interface TypeState {
   isFetching: boolean,
-  data: any 
+  data: any
   message: string
 }
 

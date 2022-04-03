@@ -11,10 +11,14 @@ import SPAlert from "../components/error-message";
 import { ICollectionItem } from "../interfaces/page";
 import LoopFilterCollection from "../components/partials/loop-filter-collection";
 
-const FilterCollection: NextPage = () => {
+interface PageProps {
+  term_id: any,
+}
+
+const FilterCollection: NextPage<PageProps> = ({term_id}) => {
   const router = useRouter()
   const breadcrumb = [{name: "Free Swatches", link: '/free-swatches'}]
-  const base_URL_API = '/api/app/get_tcb_re_group_collection_filter'
+  const base_URL_API = `/api/app/get_tcb_re_group_collection_filter?termid=${term_id}`
   const response = useFetchData(base_URL_API, 'FILTER_COLLECTION', router.query)
 
   const DisplayContent = () => {
@@ -35,3 +39,10 @@ const FilterCollection: NextPage = () => {
 }
 
 export default withAuth(FilterCollection)
+
+export async function getServerSideProps(context: any) {
+
+  return {
+    props: {term_id: context.query.term_id}
+  }
+}

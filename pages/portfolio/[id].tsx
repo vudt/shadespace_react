@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import type { NextPage } from 'next'
 import pageAPI from "../../services/page";
 import BreadCrumb from "../../components/partials/breadcrumb";
@@ -9,61 +9,31 @@ import GridGalleries from "../../components/partials/grid-galleries";
 import { TermMeta, GalleryItem } from "../../interfaces/page";
 import MetaTag from "../../components/meta-tag";
 import withAuth from "../../HOCs/withAuth";
-import { useToasts } from "react-toast-notifications";
+import useFetchData from "../../hooks/fetch-data";
+import SPAlert from "../../components/error-message";
 
 interface PageProps {
   id: number,
   pageMeta: TermMeta
 }
 
-interface GalleryState {
-  isFetching: boolean,
-  data: GalleryItem[] | null,
-  message?: string
-}
-
 const SinglePortfolio: NextPage<PageProps> = ({id, pageMeta}) => {
-  // const [galleries, setGalleries] = useState<GalleryItem[]>([])
-  const { addToast } = useToasts();
-  const initialState: GalleryState = {isFetching: false, data: null}
-  const [galleries, setGalleries] = useState<GalleryState>(initialState)
-  const breadcrumb = [
-    {name: 'Portfolio', link: '/portfolio'},
-    {name: pageMeta.name, link: ''}
-  ]
+  const breadcrumb = [{name: 'Portfolio', link: '/portfolio'}, {name: pageMeta.name, link: ''}]
+  const response = useFetchData(`api/app/get_portfolio_slide_info?termid=${id}`, 'FETCH_PORTFOLIO')
 
-  useEffect(() => {
-    (async () => {
-      const fetchUrl: string = `api/app/get_portfolio_slide_info?termid=${id}`
-      const response = await pageAPI.request(fetchUrl)
-      if (response.error) {
-        addToast(response.description, { appearance: 'error', autoDismiss: false });
-      } else {
-        setGalleries({...initialState, isFetching: false, data: JSON.parse(response.data)})
-      } 
-    })()
-  }, [])
-
-  if (!galleries.data) {
-    return (
-      <>
-        <MetaTag title={pageMeta?.name} description={pageMeta?.name} />
-        <Loading />
-      </>
-    )
+  const DisplayContent = () => {
+    if (response.isFetching || !response.data) return <Loading />
+    const listItems: GalleryItem[] = response.data
+    if (listItems.length === 0) return <SPAlert text="Data not found." />
+    return <GridGalleries data={listItems} />
   }
-  
+
   return (
     <>
       <MetaTag title={pageMeta?.name} description={pageMeta?.name} />
       <BreadCrumb breadcrumb={breadcrumb} />
       <PageContent title={pageMeta?.name} description={pageMeta?.description} />
-      { galleries.data.length > 0 ? 
-      (
-        <GridGalleries data={galleries.data} />
-      ) : (
-        <p>Not found.</p>
-      )}
+      <DisplayContent />
       <BottomButton />
     </>
   )

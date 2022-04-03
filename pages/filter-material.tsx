@@ -15,17 +15,18 @@ import SPAlert from "../components/error-message";
 import pageAPI from "../services/page";
 
 interface PageProps {
+  collection_id: number
   page_meta: TermItem
 }
 
-const FilterMaterial: NextPage<PageProps> = (props) => {
+const FilterMaterial: NextPage<PageProps> = ({collection_id, page_meta}) => {
   const router = useRouter()
-  const api_filter_material  = '/api/app/get_tcb_re_group_collection_material'
+  const api_filter_material  = `/api/app/get_tcb_re_group_collection_material?termid=${collection_id}`
   const response = useFetchData(api_filter_material, 'FILTER_METERIAL', router.query)
 
   const breadcrumb = [
     {name: "Free Swatches", link: '/free-swatches'},
-    {name: props.page_meta?.name, link: ''}
+    {name: page_meta?.name, link: ''}
   ]
 
   const DisplayContent = () => {
@@ -36,9 +37,9 @@ const FilterMaterial: NextPage<PageProps> = (props) => {
 
   return (
     <>
-      <MetaTag title={props.page_meta?.name} description={props.page_meta?.name} />
+      <MetaTag title={page_meta?.name} description={page_meta?.name} />
       <BreadCrumb breadcrumb={breadcrumb} />
-      <PageContent title={props.page_meta?.name} />
+      <PageContent title={page_meta?.name} />
       <DisplayContent />
       <BottomButton />
     </>
@@ -54,7 +55,7 @@ export async function getServerSideProps(context: any) {
   }
   return {
     props: {
-      term_id: context.query.term_id,
+      collection_id: context.query.collection_id,
       page_meta: data
     }
   }
