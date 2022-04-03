@@ -47,6 +47,18 @@ function useFetchData(url: string, fetch_type: string, query?: {}) {
             handleRequest(urlAPI, dispatch, addToast)
           }
           break;
+        case 'FETCH_CUSTOMER_SERVICE':
+          handleRequest(url, dispatch, addToast)
+          break;
+        case 'FETCH_FAQ':
+          handleRequest(url, dispatch, addToast)
+          break;
+        case 'FETCH_SHIPPING_HANDLING':
+          handleRequest(url, dispatch, addToast)
+          break;
+        case 'LIST_COLLECTIONS': 
+          handleRequest(url, dispatch, addToast)
+          break;
         case 'FILTER_COLLECTION':
           if (router.query.term_id) {
             const urlAPI = `${url}?termid=${router.query.term_id}`

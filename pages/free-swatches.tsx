@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import type { NextPage } from 'next'
 import BreadCrumb from "../components/partials/breadcrumb";
 import PageContent from "../components/partials/page-content";
@@ -10,37 +10,15 @@ import Loading from '../components/loading';
 import BottomButton from "../components/partials/bottom-button";
 import withAuth from "../HOCs/withAuth";
 import SPAlert from "../components/error-message";
-import { useToasts } from "react-toast-notifications";
+import useFetchData from "../hooks/fetch-data";
 
 interface PageProps {
   page_meta: PageMeta
 }
 
-interface SwatchesState {
-  isFetching: boolean,
-  data: GridItem[] | null,
-  message?: string
-}
-
 const FreeSwatches: NextPage<PageProps> = (props) => {
-  const { addToast } = useToasts();
-  const initialState: SwatchesState = { isFetching: false, data: null }
-  const [listItems, setListItems] = useState<SwatchesState>(initialState)
   const breadcrumb = [{name: "Free Swatches", link: ''}]
-
-  useEffect(() => {
-    (async () => {
-      const fetchUrl: string = `api/app/get_tcb_re_group_collection/?pageid=39`
-      const response = await pageAPI.request(fetchUrl)
-      if (response.error) {
-        addToast(response.description, { appearance: 'error', autoDismiss: false });
-      } else {
-        const arrItems: TermItem[] = JSON.parse(response.data)
-        const replaceData = formatData(arrItems)
-        setListItems({...initialState, isFetching: false, data: replaceData})
-      }
-    })()
-  }, [])
+  const response = useFetchData('api/app/get_tcb_re_group_collection/?pageid=39', 'LIST_COLLECTIONS')
 
   const formatData = (arrItems: any): GridItem[] => {
     const filterArray = arrItems.filter((item: any) => { return item.term_id })
@@ -57,25 +35,19 @@ const FreeSwatches: NextPage<PageProps> = (props) => {
     return replaceData
   }
 
-  if (!listItems.data) {
-    return (
-      <>
-        <MetaTag title={props.page_meta?.post_title} description={props.page_meta?.post_title} />
-        <Loading />
-      </>
-    )
+  const DisplayContent = () => {
+    if (response.isFetching || !response.data) return <Loading />
+    const data: GridItem[] = response.data
+    if (data.length === 0) return <SPAlert text="Data not found." />
+    return <GridBorder listItems={formatData(data)} />
   }
 
   return (
     <>
-      <MetaTag title={props.page_meta.post_title} description={props.page_meta.post_title} />
+      <MetaTag title={props.page_meta?.post_title} description={props.page_meta?.post_title} />
       <BreadCrumb breadcrumb={breadcrumb} />
       <PageContent title={props.page_meta.post_title} description={props.page_meta.post_content} />
-      {listItems.data.length > 0 ? (
-        <GridBorder listItems={listItems.data} />
-      ) : (
-        <SPAlert text="Data not found." />
-      )}
+      <DisplayContent />
       <BottomButton />
     </>
   )
@@ -95,5 +67,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-// export default FreeSwatches
 export default withAuth(FreeSwatches)

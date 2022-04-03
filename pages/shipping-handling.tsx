@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import type { NextPage } from 'next'
 import pageAPI from "../services/page";
 import BreadCrumb from "../components/partials/breadcrumb";
 import PageContent from "../components/partials/page-content";
 import Loading from '../components/loading';
 import MetaTag from "../components/meta-tag";
-import { useToasts } from "react-toast-notifications";
-import ContentShipping from "../components/partials/content-shipping";
+import LoopShipping from "../components/partials/loop-shipping";
 import { IContentShipping } from "../interfaces/page";
 import BottomButton from "../components/partials/bottom-button";
 import { PageMeta } from "../interfaces/page";
+import useFetchData from "../hooks/fetch-data";
 
 
 interface PageProps {
@@ -17,26 +17,16 @@ interface PageProps {
 }
 
 const ShippingHandling: NextPage<PageProps> = ({page_meta}) => {
-  const [content, setPageContent] = useState<IContentShipping[] | null>(null)
-  const breadcrumb = [{name: page_meta.post_title, link: ''}]
-  const {addToast} = useToasts()
 
-  useEffect(() => {
-    (async () => {
-      const fetchUrl: string = `api/app/get_shipping_handling_info/?pageid=1009`
-      const response = await pageAPI.request(fetchUrl)
-      if (response.error) {
-        addToast(response.description, { appearance: 'error', autoDismiss: false });
-      } else {
-        setPageContent(JSON.parse(response.data))
-      }
-    })()
-  }, [])
+  const breadcrumb = [{name: page_meta.post_title, link: ''}]
+  const response = useFetchData('api/app/get_shipping_handling_info/?pageid=1009', 'FETCH_SHIPPING_HANDLING')
 
   const DisplayContent = () => {
-    if (content === null) return <Loading />
-    if (content.length === 0) return null
-    return <ContentShipping data={content} />
+    if (response.isFetching || !response.data) return <Loading />
+    const data: IContentShipping[] = response.data
+    if (data.length === 0) return null
+    return <LoopShipping data={data} />
+
   }
     
   return (
@@ -49,7 +39,6 @@ const ShippingHandling: NextPage<PageProps> = ({page_meta}) => {
     </>
   )
 }
-
 
 export async function getServerSideProps(context: any) {
   const url_api: string = `api/app/get_page_detail/?pageid=1009`

@@ -21,20 +21,17 @@ interface PageProps {
 const FilterMaterial: NextPage<PageProps> = (props) => {
   const router = useRouter()
   const api_filter_material  = '/api/app/get_tcb_re_group_collection_material'
-  const materials = useFetchData(api_filter_material, 'FILTER_METERIAL', router.query)
+  const response = useFetchData(api_filter_material, 'FILTER_METERIAL', router.query)
 
   const breadcrumb = [
     {name: "Free Swatches", link: '/free-swatches'},
     {name: props.page_meta?.name, link: ''}
   ]
 
-  if (!materials.data) {
-    return (
-      <>
-        <MetaTag title={props.page_meta?.name} description={props.page_meta?.name} />
-        <Loading />
-      </>
-    )
+  const DisplayContent = () => {
+    if (response.isFetching || !response.data) return <Loading />
+    if (response.data.length === 0) return <SPAlert text="Data not found." />
+    return <LoopMaterial data={response.data} />
   }
 
   return (
@@ -42,11 +39,7 @@ const FilterMaterial: NextPage<PageProps> = (props) => {
       <MetaTag title={props.page_meta?.name} description={props.page_meta?.name} />
       <BreadCrumb breadcrumb={breadcrumb} />
       <PageContent title={props.page_meta?.name} />
-      {materials.data.length > 0 ? (
-        <LoopMaterial data={materials.data} />
-      ) : (
-        <SPAlert text="Material not found." />
-      )}
+      <DisplayContent />
       <BottomButton />
     </>
   )
