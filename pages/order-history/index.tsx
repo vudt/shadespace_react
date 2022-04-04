@@ -14,6 +14,7 @@ import { useToasts } from "react-toast-notifications";
 import SPAlert from "../../components/error-message";
 import LoadingSpin from "react-loading-spin";
 import moment from 'moment'
+import useFetchData from "../../hooks/fetch-data";
 
 const OrderHistory: NextPage = () => {
   const breadcrumb = [{name: "Orders", link: ''}]  
@@ -22,6 +23,10 @@ const OrderHistory: NextPage = () => {
   const router = useRouter()
   const { addToast } = useToasts()
   const headingColumnText = ['ORDER NUMBER', 'STATUS', 'SWATCHES', 'PRODUCTS', 'TOTAL', 'DATE']
+
+  const response = useFetchData('api/app/order_history', {headers: {'Authorization': userInfo.token}})
+  console.log(response.state)
+
 
   useEffect(() => {
     (async () => {
@@ -49,6 +54,10 @@ const OrderHistory: NextPage = () => {
         </div>
       )
     })
+  }
+
+  const DisplayContent = () => {
+    
   }
 
   if (!orders) {

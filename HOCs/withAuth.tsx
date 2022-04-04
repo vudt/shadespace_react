@@ -31,7 +31,7 @@ const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protec
         if (isLogged) {
           setPrevent(false)
         } else {
-          router.push('/cart')
+          // router.push('/cart')
         }
       }
     }, [isLogged])

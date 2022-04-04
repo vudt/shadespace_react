@@ -1,7 +1,16 @@
-import React, { useEffect, useReducer } from "react";
+import React, { Reducer, useEffect, useReducer, useState } from "react";
 import dataFetchReducer from "../reducers/reducerFilter";
 import pageAPI from "../services/page";
 import { useToasts } from "react-toast-notifications";
+
+
+
+interface State<T> {
+  isFetching: boolean,
+  data: T | null
+  message: string
+}
+
 
 const initialState = {
   isFetching: false,
@@ -9,27 +18,42 @@ const initialState = {
   message: ''
 }
 
-function useFetchData(url: string, fetch_type?: string, query?: {}) {
+interface ActionTypes<T> {
+  type: string,
+  payload?: T
+}
+
+function useFetchData<T>(url: string, options?: {}) {
   const { addToast } = useToasts();
-  const [state, dispatch] = useReducer(dataFetchReducer, initialState)
+  const [endPoint, setEndPoint] = useState(url)
+  const executeFetch = (url: string) => {setEndPoint(url)}
+  const [state, dispatch] = useReducer<Reducer<State<T>, ActionTypes<T>>>(dataFetchReducer, initialState);
+  let lock = false
   useEffect(() => {
     (async () => {
       dispatch({type: 'FETCH_INIT'})
-      const response = await pageAPI.request(url)
+      const response = await pageAPI.request(endPoint, options)
       if (response.data) {
-        dispatch({type: 'FETCH_SUCCESS', payload: JSON.parse(response.data)})
+        if (!lock) dispatch({type: 'FETCH_SUCCESS', payload: JSON.parse(response.data)})
       } else {
         dispatch({type: 'FETCH_FAILURE', payload: response.description})
         addToast(response.description, { appearance: 'error', autoDismiss: false });
       }
     })();
-  }, [url])
+
+    return () => {
+      lock = true
+    }
+  }, [endPoint])
   
-  return state
+
+  return {state, executeFetch}
+  // return state
 }
 
-// function useFetchData(url: string, fetch_type: string, query?: {}) {
+// function useFetchData(url: string, fetch_type?: string, query?: {}) {
 //   const { addToast } = useToasts();
+
 //   const [state, dispatch] = useReducer(dataFetchReducer, initialState)
 //   useEffect(() => {
 //     (async () => {
@@ -42,7 +66,7 @@ function useFetchData(url: string, fetch_type?: string, query?: {}) {
 //         addToast(response.description, { appearance: 'error', autoDismiss: false });
 //       }
 //     })();
-//   }, [query])
+//   }, [url])
   
 //   return state
 // }

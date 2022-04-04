@@ -18,13 +18,12 @@ interface PageProps {
 
 const ArchivePortfolio: NextPage<PageProps> = ({page_meta}) => {
   const breadcrumb = [{name: page_meta?.post_title, link: ''}]
-  const response = useFetchData('api/app/get_all_term_category_collection', 'LIST_PORTFOLIO')
+  const response = useFetchData<Portfolio[]>('api/app/get_all_term_category_collection')
 
   const DisplayContent = () => {
-    if (response.isFetching || !response.data) return <Loading />
-    const listItems: Portfolio[] = response.data
-    if (listItems.length === 0) return <SPAlert text="Data not found." />
-    return <GridPortfolio data={listItems} />
+    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.data.length === 0) return <SPAlert text="Data not found." />
+    return <GridPortfolio data={response.state.data} />
   }
 
   return (

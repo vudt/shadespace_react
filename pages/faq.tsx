@@ -18,13 +18,12 @@ interface PageProps {
 
 const Faq: NextPage<PageProps> = ({page_meta}) => {
   const breadcrumb = [{name: page_meta.post_title, link: ''}]
-  const response = useFetchData('api/app/get_faq_info', 'FETCH_FAQ')
+  const response = useFetchData<IFaq[]>('api/app/get_faq_info')
 
   const DisplayContent = () => {
-    if (response.isFetching || !response.data) return <Loading />
-    const listFaq: IFaq[] = response.data
-    if (listFaq.length === 0) return <SPAlert text="Data not found." />
-    return <LoopFaq data={listFaq} />
+    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.data.length === 0) return <SPAlert text="Data not found." />
+    return <LoopFaq data={response.state.data} />
   }
 
   return (

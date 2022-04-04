@@ -14,8 +14,7 @@ import SPAlert from "../components/error-message";
 
 const CustomerServices: NextPage= () => {
   const breadcrumb = [{name: "Customer Services", link: ''}]
-  const endPoint = `api/app/get_mobile_customer_services`
-  const response = useFetchData(endPoint, 'FETCH_CUSTOMER_SERVICE')
+  const response = useFetchData<GridItem[]>(`api/app/get_mobile_customer_services`)
 
   const formatLink = (item: GridItem): string => {
     let link = (item.template != 'page') ? `/${item.template}` : `/${item.template}/${item.id}`
@@ -27,10 +26,9 @@ const CustomerServices: NextPage= () => {
   } 
 
   const DisplayContent = () => {
-    if (response.isFetching || !response.data) return <Loading />
-    const listItems: GridItem[] = response.data
-    if (listItems.length === 0) return <SPAlert text="Data not found." />
-    const formatData = listItems.map(item => ({...item, link: formatLink(item), img: formatImage(item)}))
+    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.data.length === 0) return <SPAlert text="Data not found." />
+    const formatData = response.state.data.map(item => ({...item, link: formatLink(item), img: formatImage(item)}))
     return <GridBorder listItems={formatData} />
   }
   

@@ -22,7 +22,7 @@ interface PageProps {
 const FilterMaterial: NextPage<PageProps> = ({collection_id, page_meta}) => {
   const router = useRouter()
   const api_filter_material  = `/api/app/get_tcb_re_group_collection_material?termid=${collection_id}`
-  const response = useFetchData(api_filter_material, 'FILTER_METERIAL', router.query)
+  const response = useFetchData(api_filter_material)
 
   const breadcrumb = [
     {name: "Free Swatches", link: '/free-swatches'},

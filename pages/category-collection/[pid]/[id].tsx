@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { NextPage } from 'next';
 import pageAPI from "../../../services/page";
-import { PageMeta, BreadCumb, TermItem } from "../../../interfaces/page";
+import { PageMeta, BreadCumb, TermItem, ICollectionItem } from "../../../interfaces/page";
 import withAuth from "../../../HOCs/withAuth";
 import Loading from "../../../components/loading";
 import LoopCollectionItem from "../../../components/partials/loop-collection-item";
@@ -24,23 +24,23 @@ const CategoryCollection:NextPage<PageProps> = (props) => {
 
   const init_breadcrumb = [{name: props.pageMeta.term_detail.name, link: ''}]
   const [breadcrumb, setBreadCrumb] = useState<BreadCumb[]>(init_breadcrumb)
-  const responsePage = useFetchData(`api/app/get_page_detail/?pageid=${props.pid}`)
-  const reponseCollections = useFetchData(`api/app/get_post_category_collection?termid=${props.id}`)
+  const responsePage = useFetchData<PageMeta>(`api/app/get_page_detail/?pageid=${props.pid}`)
+  const responseCollections = useFetchData<ICollectionItem[]>(`api/app/get_post_category_collection?termid=${props.id}`)
 
+  
   useEffect(() => {
-    if (responsePage.data) {
-      console.log(responsePage.data)
+    if (responsePage.state.data) {
       setBreadCrumb([
         ...breadcrumb, 
-        {name: responsePage.data?.post_title || 'Window Treatments', link: `/window-treatments/${props.pid > 0 ? props.pid : ''}`}
+        {name: responsePage.state.data?.post_title || 'Window Treatments', link: `/window-treatments/${props.pid > 0 ? props.pid : ''}`}
       ].reverse())
     }
-  }, [responsePage])
+  }, [responsePage.state])
 
   const DisplayContent = () => {
-    if (reponseCollections.isFetching || !reponseCollections.data) return <Loading />
-    if (reponseCollections.data.length === 0) return null
-    return <LoopCollectionItem dataCollection={reponseCollections.data} />
+    if (responseCollections.state.isFetching || !responseCollections.state.data) return <Loading />
+    if (responseCollections.state.data.length === 0) return null
+    return <LoopCollectionItem dataCollection={responseCollections.state.data} />
   }
 
   return (

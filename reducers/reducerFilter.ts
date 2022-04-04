@@ -1,39 +1,56 @@
+import { StrictMode } from "react"
+
 enum ActionTypes {
   FETCH_INIT = 'FETCH_INIT',
   FETCH_SUCCESS = 'FETCH_SUCCESS',
   FETCH_FAILURE = 'FETCH_FAILURE'
 }
 
-interface TypeAction {
+interface TypeAction<T> {
   type: string,
-  payload?: any
+  payload?: T
 }
 
-interface TypeState {
+
+interface TypeState<T> {
   isFetching: boolean,
-  data: any
+  data: T | null
   message: string
 }
 
-let initialState: TypeState = {
+const initialState = {
   isFetching: false,
   data: null,
   message: ''
 } 
 
-
-const dataFetchReducer = (state = initialState, action: TypeAction) : TypeState => {
+const dataFetchReducer = <T extends any>(state: TypeState<T> = initialState, action: TypeAction<T>) : TypeState<T> => {
   switch (action.type) {
     case ActionTypes.FETCH_INIT: 
       return {...state, isFetching: true}
     case ActionTypes.FETCH_SUCCESS:
-      return {...state, isFetching: false, data: action.payload}
+      return {...state, isFetching: false, data: action.payload!}
     case ActionTypes.FETCH_FAILURE:
-      return {...state, isFetching: false, message: action.payload}
-      // return {...state, isFetching: false, message: 'There has been a critical error on this website…arn more about troubleshooting WordPress.'}
+      // return {...state, isFetching: false, message: action.payload}
+      return {...state, isFetching: false, message: 'There has been a critical error on this website…arn more about troubleshooting WordPress.'}
     default:
       return state
   }
 }
+
+
+// const dataFetchReducer = (state = initialState, action: TypeAction) : TypeState => {
+//   switch (action.type) {
+//     case ActionTypes.FETCH_INIT: 
+//       return {...state, isFetching: true}
+//     case ActionTypes.FETCH_SUCCESS:
+//       return {...state, isFetching: false, data: action.payload}
+//     case ActionTypes.FETCH_FAILURE:
+//       // return {...state, isFetching: false, message: action.payload}
+//       return {...state, isFetching: false, message: 'There has been a critical error on this website…arn more about troubleshooting WordPress.'}
+//     default:
+//       return state
+//   }
+// }
 
 export default dataFetchReducer

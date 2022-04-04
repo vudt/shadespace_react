@@ -19,14 +19,12 @@ interface PageProps {
 const ShippingHandling: NextPage<PageProps> = ({page_meta}) => {
 
   const breadcrumb = [{name: page_meta.post_title, link: ''}]
-  const response = useFetchData('api/app/get_shipping_handling_info/?pageid=1009', 'FETCH_SHIPPING_HANDLING')
+  const response = useFetchData<IContentShipping[]>('api/app/get_shipping_handling_info/?pageid=1009')
 
   const DisplayContent = () => {
-    if (response.isFetching || !response.data) return <Loading />
-    const data: IContentShipping[] = response.data
-    if (data.length === 0) return null
-    return <LoopShipping data={data} />
-
+    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.data.length === 0) return null
+    return <LoopShipping data={response.state.data} />
   }
     
   return (

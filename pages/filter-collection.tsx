@@ -5,7 +5,6 @@ import MetaTag from "../components/meta-tag";
 import Loading from '../components/loading';
 import BottomButton from "../components/partials/bottom-button";
 import useFetchData from "../hooks/fetch-data";
-import { useRouter } from "next/router";
 import withAuth from "../HOCs/withAuth";
 import SPAlert from "../components/error-message";
 import { ICollectionItem } from "../interfaces/page";
@@ -16,16 +15,13 @@ interface PageProps {
 }
 
 const FilterCollection: NextPage<PageProps> = ({term_id}) => {
-  const router = useRouter()
   const breadcrumb = [{name: "Free Swatches", link: '/free-swatches'}]
-  const base_URL_API = `/api/app/get_tcb_re_group_collection_filter?termid=${term_id}`
-  const response = useFetchData(base_URL_API, 'FILTER_COLLECTION', router.query)
+  const response = useFetchData<ICollectionItem[]>(`/api/app/get_tcb_re_group_collection_filter?termid=${term_id}`)
 
   const DisplayContent = () => {
-    if (response.isFetching || !response.data) return <Loading />
-    const listCollections: ICollectionItem[] = response.data
-    if (listCollections.length === 0) return <SPAlert text="Collection not found." />
-    return <LoopFilterCollection data={listCollections} />
+    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.data.length === 0) return <SPAlert text="Collection not found." />
+    return <LoopFilterCollection data={response.state.data} />
   }
   
   return (
@@ -41,7 +37,6 @@ const FilterCollection: NextPage<PageProps> = ({term_id}) => {
 export default withAuth(FilterCollection)
 
 export async function getServerSideProps(context: any) {
-
   return {
     props: {term_id: context.query.term_id}
   }

@@ -12,14 +12,13 @@ import MetaTag from "../../components/meta-tag";
 import SPAlert from "../../components/error-message";
 
 const WindowTreatMents: NextPage = (props) => {
-  const response = useFetchData('api/app/get_term_window_treatments', 'GET_WINDOW_TREATMENTS')
   const breadcrumb = [{name: 'Window Treatments', link: ''}]
+  const response = useFetchData<GridItem[]>('api/app/get_term_window_treatments', 'GET_WINDOW_TREATMENTS')
 
   const DisplayContent = () => {
-    if (response.isFetching || !response.data) return <Loading />
-    const listItems: GridItem[] = response.data
-    if (listItems.length === 0) return <SPAlert text="Data not found." />
-    return <GridBorder listItems={listItems} />
+    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.data.length === 0) return <SPAlert text="Data not found." />
+    return <GridBorder listItems={response.state.data} />
   }
 
   return (

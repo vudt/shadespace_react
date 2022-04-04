@@ -18,7 +18,7 @@ interface PageProps {
 
 const FreeSwatches: NextPage<PageProps> = (props) => {
   const breadcrumb = [{name: "Free Swatches", link: ''}]
-  const response = useFetchData('api/app/get_tcb_re_group_collection/?pageid=39', 'LIST_COLLECTIONS')
+  const response = useFetchData<GridItem[]>('api/app/get_tcb_re_group_collection/?pageid=39', 'LIST_COLLECTIONS')
 
   const formatData = (arrItems: any): GridItem[] => {
     const filterArray = arrItems.filter((item: any) => { return item.term_id })
@@ -36,10 +36,9 @@ const FreeSwatches: NextPage<PageProps> = (props) => {
   }
 
   const DisplayContent = () => {
-    if (response.isFetching || !response.data) return <Loading />
-    const data: GridItem[] = response.data
-    if (data.length === 0) return <SPAlert text="Data not found." />
-    return <GridBorder listItems={formatData(data)} />
+    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.data.length === 0) return <SPAlert text="Data not found." />
+    return <GridBorder listItems={formatData(response.state.data)} />
   }
 
   return (

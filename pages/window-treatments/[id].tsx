@@ -18,17 +18,16 @@ interface PageProps {
 }
 
 const WindowTreatMentItem: NextPage<PageProps> = ({id, pageMeta}) => {
-  const response = useFetchData(`api/app/get_term_window_treatments?pageid=${id}`, 'FETCH_WINDOW_TREATMENT', id)
+  const response = useFetchData<GridItem[]>(`api/app/get_term_window_treatments?pageid=${id}`)
   const breadcrumb = [
     {name: 'Window Treatments', link: '/window-treatments'},
     {name: pageMeta?.post_title, link: ''}
   ]
 
   const DisplayContent = () => {
-    if (response.isFetching || !response.data) return <Loading />
-    const listItems: GridItem[] = response.data
-    if (listItems.length === 0) return <SPAlert text="Data not found." />
-    return <GridBorder listItems={listItems} />
+    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.data.length === 0) return <SPAlert text="Data not found." />
+    return <GridBorder listItems={response.state.data} />
   }
 
   return (
