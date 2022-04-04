@@ -19,37 +19,19 @@ interface PageProps {
 
 const MeasureInstall: NextPage<PageProps> = ({page_meta}) => {
   const breadcrumb = [{name: page_meta.post_title, link: ''}]
-  const listMeasurement = useFetchData('api/app/get_measure_install_info', 'FETCH_MEASURE_INFO')
-  
-  const loopMeasurement = (arrData: IMeasureMent[]) => {
-    return arrData.map((item, index) => (
-      <GridMeasureInstall key={index} index={index} data={item} />
-    ))
+  const response = useFetchData('api/app/get_measure_install_info', 'FETCH_MEASURE_INFO')
+  const DisplayContent = () => {
+    if (response.isFetching || !response.data) return <Loading />
+    if (response.data.length === 0) return <SPAlert text="Data not found." />
+    return <GridMeasureInstall data={response.data} />
   }
 
-  if (!listMeasurement.data) {
-    return (
-      <>
-        <MetaTag title={page_meta?.post_title} description={page_meta?.post_title} />
-        <Loading />
-      </>
-    )
-  }
-  
   return (
     <>
       <MetaTag title={page_meta?.post_title} description={page_meta?.post_title} />
       <BreadCrumb breadcrumb={breadcrumb} />
       <PageContent title={page_meta?.post_title}  />
-      <div className="page-content">
-        <div className="container grid-border">
-        { listMeasurement.data ? (
-          loopMeasurement(listMeasurement.data) 
-        ) : (
-          <SPAlert text="Data not found." />
-        )}
-        </div>
-      </div>
+      <DisplayContent />
       <BottomButton />
     </>
   )

@@ -10,7 +10,7 @@ const MetaTag = (props: MetaTagProps) => {
   return (
     <>
       <Head>
-        <title>{props.title} - Shade Space</title>
+        <title>{props.title}</title>
         <meta name="description" content={props.description} />
       </Head>
     </>

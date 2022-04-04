@@ -5,18 +5,15 @@ interface CollectionItemProps {
   dataCollection: ICollectionItem[]
 }
 
-const CollectionItem = (props: CollectionItemProps) => {
-  if (props.dataCollection.length == 0) {
-    return null
-  }
+const LoopCollectionItem = ({dataCollection}: CollectionItemProps) => {
 
-  const render_collection_item = () => {
-    return props.dataCollection.map((item, index) => (
+  const CollectionItem = ({item, index}: {item: ICollectionItem, index: number}) => {
+    return (
       <div key={index} className="cat-collection-item">
         <a href={item.link} target="_blank">
           <img src={item.img} />
         </a>
-        <h4 className="ng-binding">{item.name}</h4>
+        <h4>{item.name}</h4>
         { item.description &&
           <div className="item-desc" dangerouslySetInnerHTML={{__html: item.description}}></div>
         }
@@ -27,16 +24,16 @@ const CollectionItem = (props: CollectionItemProps) => {
           <a className="web-link" href={item.link} target="_blank">Full Site &gt;&gt;</a>
         </div>
       </div>
-    ))
+    )
   }
 
   return (
     <div className="content-page">
       <div className="container">
-        { render_collection_item() }
+        {dataCollection.map((item, index) => <CollectionItem item={item} index={index} />)}
       </div>
     </div>
   )
 }
 
-export default CollectionItem
+export default LoopCollectionItem
