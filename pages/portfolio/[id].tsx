@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import type { NextPage } from 'next'
 import pageAPI from "../../services/page";
 import BreadCrumb from "../../components/partials/breadcrumb";
@@ -11,6 +11,7 @@ import MetaTag from "../../components/meta-tag";
 import withAuth from "../../HOCs/withAuth";
 import useFetchData from "../../hooks/fetch-data";
 import SPAlert from "../../components/error-message";
+import { useRouter } from "next/router";
 
 interface PageProps {
   id: number,
@@ -19,13 +20,17 @@ interface PageProps {
 
 const SinglePortfolio: NextPage<PageProps> = ({id, pageMeta}) => {
   const breadcrumb = [{name: 'Portfolio', link: '/portfolio'}, {name: pageMeta.name, link: ''}]
-  const response = useFetchData(`api/app/get_portfolio_slide_info?termid=${id}`, 'FETCH_PORTFOLIO')
+  const response = useFetchData<GalleryItem[]>(`api/app/get_portfolio_slide_info?termid=${id}`)
+  const router = useRouter()
+
+  useEffect(() => {
+    response.executeFetch(`api/app/get_portfolio_slide_info?termid=${router.query.id}`)
+  }, [router.query])
 
   const DisplayContent = () => {
-    if (response.isFetching || !response.data) return <Loading />
-    const listItems: GalleryItem[] = response.data
-    if (listItems.length === 0) return <SPAlert text="Data not found." />
-    return <GridGalleries data={listItems} />
+    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.data.length === 0) return <SPAlert text="Data not found." />
+    return <GridGalleries data={response.state.data} />
   }
 
   return (

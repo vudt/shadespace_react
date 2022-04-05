@@ -10,6 +10,7 @@ import BottomButton from "../../../components/partials/bottom-button";
 import BreadCrumb from "../../../components/partials/breadcrumb";
 import MetaTag from "../../../components/meta-tag";
 import useFetchData from "../../../hooks/fetch-data";
+import { useRouter } from "next/router";
 
 interface PageProps {
   id: number,
@@ -20,19 +21,24 @@ interface PageProps {
   }
 }
 
-const CategoryCollection:NextPage<PageProps> = (props) => {
+const CategoryCollection:NextPage<PageProps> = ({pageMeta, pid, id}) => {
 
-  const init_breadcrumb = [{name: props.pageMeta.term_detail.name, link: ''}]
+  const init_breadcrumb = [{name: pageMeta.term_detail.name, link: ''}]
   const [breadcrumb, setBreadCrumb] = useState<BreadCumb[]>(init_breadcrumb)
-  const responsePage = useFetchData<PageMeta>(`api/app/get_page_detail/?pageid=${props.pid}`)
-  const responseCollections = useFetchData<ICollectionItem[]>(`api/app/get_post_category_collection?termid=${props.id}`)
-
+  const responsePage = useFetchData<PageMeta>(`api/app/get_page_detail/?pageid=${pid}`)
+  const responseCollections = useFetchData<ICollectionItem[]>(`api/app/get_post_category_collection?termid=${id}`)
+  const router = useRouter()
   
+  useEffect(() => {
+    responsePage.executeFetch(`api/app/get_page_detail/?pageid=${router.query.pid}`)
+    responsePage.executeFetch(`api/app/get_post_category_collection?termid=${router.query.id}`)
+  }, [router.query])
+
   useEffect(() => {
     if (responsePage.state.data) {
       setBreadCrumb([
         ...breadcrumb, 
-        {name: responsePage.state.data?.post_title || 'Window Treatments', link: `/window-treatments/${props.pid > 0 ? props.pid : ''}`}
+        {name: responsePage.state.data?.post_title || 'Window Treatments', link: `/window-treatments/${pid > 0 ? pid : ''}`}
       ].reverse())
     }
   }, [responsePage.state])
@@ -45,9 +51,9 @@ const CategoryCollection:NextPage<PageProps> = (props) => {
 
   return (
     <>
-      <MetaTag title={props.pageMeta.term_detail.name} description={props.pageMeta.term_detail.name} />
+      <MetaTag title={pageMeta.term_detail.name} description={pageMeta.term_detail.name} />
       <BreadCrumb breadcrumb={breadcrumb} />
-      <PageContent title={props.pageMeta.term_detail.name} description={props.pageMeta.term_content} />
+      <PageContent title={pageMeta.term_detail.name} description={pageMeta.term_content} />
       <DisplayContent />
       <BottomButton />
     </>

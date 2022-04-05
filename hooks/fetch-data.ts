@@ -31,10 +31,10 @@ function useFetchData<T>(url: string, options?: {}) {
   
   useEffect(() => {
     let lock = false
-    console.log(endPoint)
     const handleRequest = async() => {
       dispatch({type: 'FETCH_INIT'})
       const response = await pageAPI.request(endPoint, options)
+      console.log('FETCH_INIT')
       if (response.data) {
         if (!lock) dispatch({type: 'FETCH_SUCCESS', payload: JSON.parse(response.data)})
       } else {
@@ -56,27 +56,6 @@ function useFetchData<T>(url: string, options?: {}) {
   
 
   return {state, executeFetch}
-  // return state
 }
-
-// function useFetchData(url: string, fetch_type?: string, query?: {}) {
-//   const { addToast } = useToasts();
-
-//   const [state, dispatch] = useReducer(dataFetchReducer, initialState)
-//   useEffect(() => {
-//     (async () => {
-//       dispatch({type: 'FETCH_INIT'})
-//       const response = await pageAPI.request(url)
-//       if (response.data) {
-//         dispatch({type: 'FETCH_SUCCESS', payload: JSON.parse(response.data)})
-//       } else {
-//         dispatch({type: 'FETCH_FAILURE', payload: response.description})
-//         addToast(response.description, { appearance: 'error', autoDismiss: false });
-//       }
-//     })();
-//   }, [url])
-  
-//   return state
-// }
 
 export default useFetchData;

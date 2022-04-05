@@ -12,16 +12,12 @@ const GridGalleries = ({data}: {data: GalleryItem[]}) => {
 
   const [configLightbox, setConfigLightbox] = useState<IConfigLightbox>({photoIndex: 0, isOpen: false})
   
-  const renderItem = () => {
-    return data.map((item, index) => (
-      <div key={index} onClick={() => setConfigLightbox({isOpen: true, photoIndex: index})} className="item-col-2 item-grid square-bg" style={{ backgroundImage: `url(${item.url})` }}>
+  const LoopGallery = ({item, index}: {item: GalleryItem, index: number}) => {
+    return (
+      <div onClick={() => setConfigLightbox({isOpen: true, photoIndex: index})} className="item-col-2 item-grid square-bg" style={{ backgroundImage: `url(${item.url})` }}>
         <img src={item.url} style={{display: 'none'}} />
       </div>
-    ))
-  }
-
-  if (data.length == 0) {
-    return null
+    )
   }
 
   const nextIndex: any = (configLightbox.photoIndex + 1) % data.length
@@ -31,7 +27,7 @@ const GridGalleries = ({data}: {data: GalleryItem[]}) => {
     <div className="section">
       <div className="container grid-border">
         <div className="clearfix grid-border-inner">
-          { renderItem() }
+          { data.map((item, index) => <LoopGallery key={index} item={item} index={index} />) }
           { configLightbox.isOpen && 
             <Lightbox 
               mainSrc={data[configLightbox.photoIndex].url}

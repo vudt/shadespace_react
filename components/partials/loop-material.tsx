@@ -32,7 +32,6 @@ const LoopMaterial = (props: {data: MaterialProps[]}) => {
   }
 
   const LoopSwatch = ({swatches}: {swatches: SampleItem[]}) => {
-    console.log(swatches)
     return (
       <div className="grid-border material-container">
         <div className="clearfix grid-border-inner">

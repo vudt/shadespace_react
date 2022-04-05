@@ -18,7 +18,7 @@ interface PageProps {
 
 const FreeSwatches: NextPage<PageProps> = (props) => {
   const breadcrumb = [{name: "Free Swatches", link: ''}]
-  const response = useFetchData<GridItem[]>('api/app/get_tcb_re_group_collection/?pageid=39', 'LIST_COLLECTIONS')
+  const response = useFetchData<GridItem[]>('api/app/get_tcb_re_group_collection/?pageid=39')
 
   const formatData = (arrItems: any): GridItem[] => {
     const filterArray = arrItems.filter((item: any) => { return item.term_id })

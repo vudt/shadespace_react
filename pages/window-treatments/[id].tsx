@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import type { NextPage } from 'next'
 import pageAPI from "../../services/page";
 import useFetchData from "../../hooks/fetch-data";
@@ -11,6 +11,7 @@ import BottomButton from "../../components/partials/bottom-button";
 import withAuth from "../../HOCs/withAuth";
 import GridBorder from "../../components/partials/grid-border";
 import SPAlert from "../../components/error-message";
+import { useRouter } from "next/router";
 
 interface PageProps {
   id: number,
@@ -18,11 +19,16 @@ interface PageProps {
 }
 
 const WindowTreatMentItem: NextPage<PageProps> = ({id, pageMeta}) => {
+  const router = useRouter()
   const response = useFetchData<GridItem[]>(`api/app/get_term_window_treatments?pageid=${id}`)
   const breadcrumb = [
     {name: 'Window Treatments', link: '/window-treatments'},
     {name: pageMeta?.post_title, link: ''}
   ]
+
+  useEffect(() => {
+    response.executeFetch(`api/app/get_term_window_treatments?pageid=${router.query.id}`)
+  }, [router.query])
 
   const DisplayContent = () => {
     if (response.state.isFetching || !response.state.data) return <Loading />

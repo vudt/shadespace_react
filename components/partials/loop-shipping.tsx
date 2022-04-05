@@ -3,9 +3,9 @@ import { IContentShipping } from "../../interfaces/page";
 
 const LoopShipping = ({data}: {data: IContentShipping[]}) => {
 
-  const ShippingInfo = ({post, index} : {post: IContentShipping, index: number}) => {
+  const ShippingInfo = ({post} : {post: IContentShipping}) => {
     return (
-      <div key={index} className="wrap-generic">
+      <div className="wrap-generic">
         <div style={{lineHeight: 'initial'}} dangerouslySetInnerHTML={{__html: post.img!}}></div>
         <div className="product-info">
           <h3>{post.item?.title}</h3>
@@ -20,7 +20,7 @@ const LoopShipping = ({data}: {data: IContentShipping[]}) => {
       <div className="container">
       {data.map((shipping_info, index) => {
         if (shipping_info.img && shipping_info.item) {
-          return <ShippingInfo key={index} post={shipping_info} index={index} />
+          return <ShippingInfo key={index} post={shipping_info} />
         }
       })}
       </div>

@@ -88,16 +88,7 @@ const CheckoutForm = (props: TypeProps) => {
   }, [submitCount])
 
   const triggerValidate = () => {  
-    trigger([
-      "first_name", 
-      "last_name", 
-      "company_name", 
-      "email", 
-      "phone", 
-      "address_1", 
-      "country", 
-      "postcode"
-    ])
+    trigger(["first_name", "last_name", "company_name", "email",  "phone", "address_1", "country", "postcode"])
   }
 
   function closeModal() {
@@ -161,7 +152,6 @@ const CheckoutForm = (props: TypeProps) => {
             </Link>
           </div>
       </Modal>
-
     </div>
   )
 }

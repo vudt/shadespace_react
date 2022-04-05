@@ -27,7 +27,7 @@ const initialState = {
 const dataFetchReducer = <T extends any>(state: TypeState<T>, action: TypeAction<T>) : TypeState<T> => {
   switch (action.type) {
     case ActionTypes.FETCH_INIT: 
-      return {...state, isFetching: true}
+      return {...initialState, isFetching: true}
     case ActionTypes.FETCH_SUCCESS:
       return {...state, isFetching: false, data: action.payload!}
     case ActionTypes.FETCH_FAILURE:
