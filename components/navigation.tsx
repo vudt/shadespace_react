@@ -16,15 +16,25 @@ const Navigation = () => {
   const ref = useRef<HTMLHeadingElement>(null)
   
   useEffect(() => {
-    dispatch(fetchNavigation())
 
+    dispatch(fetchNavigation())
     const checkIfClickOutside = (e: any) => {
-      console.log(ref.current)
+      if (e.target.className) {
+        let arr_className = e.target.className.split(" ")
+        if (arr_className.includes('menu') || arr_className.includes('fa-bars')) {
+          return false;
+        }
+      }
+      
       if (ref.current && !ref.current.contains(e.target)) {
         dispatch(closeNav(false))
       }
     }
     document.addEventListener("mousedown", checkIfClickOutside)
+
+    return () => {
+      dispatch(closeNav(false))
+    }
   }, [])
 
   useEffect(() => {
