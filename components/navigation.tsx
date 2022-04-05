@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { logout } from "../redux/authSlice";
 import { fetchNavigation } from "../redux/navigationSlice";
+import { closeNav } from "../redux/navigationSlice";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -12,10 +13,18 @@ const Navigation = () => {
   const [classMenu, setClassMenu] = useState('')
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const ref = useRef<HTMLHeadingElement>(null)
   
   useEffect(() => {
-    if (data.length > 0) return 
     dispatch(fetchNavigation())
+
+    const checkIfClickOutside = (e: any) => {
+      console.log(ref.current)
+      if (ref.current && !ref.current.contains(e.target)) {
+        dispatch(closeNav(false))
+      }
+    }
+    document.addEventListener("mousedown", checkIfClickOutside)
   }, [])
 
   useEffect(() => {
@@ -23,6 +32,7 @@ const Navigation = () => {
   }, [userInfo])
 
   useEffect(() => {
+    // handle open-close menu
     if (active) {
       setTimeout(function(){
         setClassMenu('cbp-spmenu-open')
@@ -43,7 +53,7 @@ const Navigation = () => {
 
   return(
     <>
-      <nav className={`cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right ${ classMenu }`} id="cbp-spmenu-s2">
+      <nav ref={ref} className={`cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right ${ classMenu }`} id="cbp-spmenu-s2">
         <h3 className="menu-header">
           {displayName ? (
             <>
