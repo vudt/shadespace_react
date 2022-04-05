@@ -72,7 +72,6 @@ const authSlice = createSlice({
       return {...state, isLogged: true, isLoading: false, userInfo: action.payload, errorMessage: ''}
     }),
     builder.addCase(userLogin.rejected, (state, action) => {
-      sessionStorage.removeItem('token')
       return {...initialState, errorMessage: action.payload?.message!}
     })
     builder.addCase(getUserInfo.pending, (state, _) => {

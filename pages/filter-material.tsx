@@ -4,15 +4,19 @@ import BreadCrumb from "../components/partials/breadcrumb";
 import MetaTag from "../components/meta-tag";
 import Loading from '../components/loading';
 import BottomButton from "../components/partials/bottom-button";
-import { useRouter } from "next/router";
 import PageContent from "../components/partials/page-content";
 import useFetchData from "../hooks/fetch-data";
-import styled from 'styled-components';
 import LoopMaterial from "../components/partials/loop-material";
 import { TermItem } from "../interfaces/page";
+import { MaterialInfo, SampleItem } from "../interfaces/material";
 import withAuth from "../HOCs/withAuth";
 import SPAlert from "../components/error-message";
 import pageAPI from "../services/page";
+
+interface MaterialData {
+  info: MaterialInfo,
+  swatches: SampleItem[]
+}
 
 interface PageProps {
   collection_id: number
@@ -20,19 +24,18 @@ interface PageProps {
 }
 
 const FilterMaterial: NextPage<PageProps> = ({collection_id, page_meta}) => {
-  const router = useRouter()
-  const api_filter_material  = `/api/app/get_tcb_re_group_collection_material?termid=${collection_id}`
-  const response = useFetchData(api_filter_material)
-
+  
   const breadcrumb = [
     {name: "Free Swatches", link: '/free-swatches'},
     {name: page_meta?.name, link: ''}
   ]
 
+  const response = useFetchData<MaterialData[]>(`/api/app/get_tcb_re_group_collection_material?termid=${collection_id}`)
+
   const DisplayContent = () => {
-    if (response.isFetching || !response.data) return <Loading />
-    if (response.data.length === 0) return <SPAlert text="Data not found." />
-    return <LoopMaterial data={response.data} />
+    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.data.length === 0) return <SPAlert text="Data not found." />
+    return <LoopMaterial data={response.state.data} />
   }
 
   return (

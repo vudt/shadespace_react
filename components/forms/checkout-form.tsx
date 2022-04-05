@@ -5,7 +5,7 @@ import OrderService from "../../services/order";
 import { useAppSelector, useAppDispatch } from "../../redux/store";
 import { emptyCart } from "../../redux/cartSlice";
 import { useToasts } from 'react-toast-notifications';
-import { Cart } from "../../models/cart";
+import HelperService from "../../services/helper";
 import LoadingSpin from "react-loading-spin";
 import Modal from 'react-modal';
 import Link from "next/link";
@@ -52,6 +52,7 @@ const CheckoutForm = (props: TypeProps) => {
   const dispatch = useAppDispatch()
 
   const onSubmit = handleSubmit(async(data) => {
+    removeAllToasts()
     const paramsOrder = OrderService.prepareParam(cart.data, userInfo, data)
     if (paramsOrder) {
       const response = await pageAPI.request("api/app/create_order", {
@@ -74,6 +75,8 @@ const CheckoutForm = (props: TypeProps) => {
 
   useEffect(() => {
     removeAllToasts()
+    // show error
+    console.log(errors)
     if (errors) {
       lodash.forEach(errors, (item) => {
         if (item?.message) {
@@ -83,24 +86,6 @@ const CheckoutForm = (props: TypeProps) => {
       })
     }
   }, [submitCount])
-
-  const validate_text_field = (name: string) => {
-    return {
-      required: `${name} is required`, 
-      minLength: { 
-        value: 2, 
-        message: `${name} must have at least 2 characters.`
-      }
-    }
-  }
-
-  const validate_email_field = {
-    required: "Please input your email",
-    pattern: {
-      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, 
-      message: "Invalid email address"
-    }
-  }
 
   const triggerValidate = () => {  
     trigger([
@@ -124,35 +109,35 @@ const CheckoutForm = (props: TypeProps) => {
       <form onSubmit={onSubmit}  className="form">
         <div className="form-group">
           <label>First name *</label>
-          <input {...register("first_name", validate_text_field('First name'))} className="form-control" />
+          <input {...register("first_name", HelperService.validate_text_field('First name'))} className="form-control" />
         </div>
         <div className="form-group">
           <label>Last name *</label>
-          <input {...register("last_name", validate_text_field('Last name'))} className="form-control" />
+          <input {...register("last_name", HelperService.validate_text_field('Last name'))} className="form-control" />
         </div>
         <div className="form-group">
           <label>Company name *</label>
-          <input {...register("company_name", validate_text_field('Company name'))} className="form-control" />
+          <input {...register("company_name", HelperService.validate_text_field('Company name'))} className="form-control" />
         </div>
         <div className="form-group">
           <label>Email address *</label>
-          <input {...register("email", validate_email_field)} className="form-control" />
+          <input {...register("email", HelperService.validate_email_field)} className="form-control" />
         </div>
         <div className="form-group">
           <label>Phone *</label>
-          <input {...register("phone", validate_text_field('Phone'))} className="form-control" />
+          <input {...register("phone", HelperService.validate_phone_field('Phone'))} className="form-control" />
         </div>
         <div className="form-group">
           <label>Address *</label>
-          <input {...register("address_1", validate_text_field('Address'))} className="form-control" />
+          <input {...register("address_1", HelperService.validate_text_field('Address'))} className="form-control" />
         </div>
         <div className="form-group">
           <label>Town / City *</label>
-          <input {...register("country", validate_text_field('Town / City'))} className="form-control" />
+          <input {...register("country", HelperService.validate_text_field('Town / City'))} className="form-control" />
         </div>
         <div className="form-group">
           <label>Postcode / Zip *</label>
-          <input {...register("postcode", validate_text_field('Postcode / Zip'))} className="form-control" />
+          <input {...register("postcode", HelperService.validate_text_field('Postcode / Zip'))} className="form-control" />
         </div>
         <button type="submit" disabled={isSubmitting} onClick={triggerValidate} className="btn btn-default">
           { isSubmitting ? (

@@ -24,7 +24,7 @@ const TrackOrderForm = () => {
 
   return (
     <div className="container page-desc">
-      <form onSubmit={onSubmit}  className="form">
+      <form onSubmit={onSubmit} className="form">
         <div className="form-group">
           <label>Your order number</label>
           <input {...register("order_number", {required: "Please input order number"})} className={`form-control ${errors.order_number ? 'input--error' : ''}`} />
@@ -37,7 +37,9 @@ const TrackOrderForm = () => {
           )}
         </button>
       </form>
-      { response.state.data && <LoopOrder columns={headingColumnText} orders={[response.state.data]} /> }
+      { response.state.data && 
+        <LoopOrder columns={headingColumnText} orders={[response.state.data]} /> 
+      }
     </div>
   )
 }

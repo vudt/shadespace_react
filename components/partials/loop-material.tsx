@@ -14,40 +14,48 @@ const LoopMaterial = (props: {data: MaterialProps[]}) => {
   const { cart } = useAppSelector(state => state)
   const cartModel = new Cart(cart.data)
 
-  const renderSwatches = (swatches: SampleItem[]) => {
-    return swatches.map((swatch, key) => {
-      let cart_item = cartModel.getCartItemById(swatch.post_id)
-      return (
-        <div key={key} className="item-col-2 item-grid material-item">
-          <a className="full-img"><img src={swatch.thumb} /></a>
-          <div className="item-content">
-            <span>{swatch.swatch_name}</span>
-            { cart_item ? (
-              <button className="remove-swatch-btn" onClick={() => dispatch(removeCartItem({id: swatch.post_id}))} >Remove</button>
-            ) : (
-              <button className="add-swatch-btn" onClick={() => dispatch(addToCart({item: swatch, quantity: 1}))} >Order swatch</button>
-            ) }
-            
-          </div>
+  const SwatchItem = (swatch: SampleItem) => {
+    let cart_item = cartModel.getCartItemById(swatch.post_id)
+    return (
+      <div className="item-col-2 item-grid material-item">
+        <a className="full-img"><img src={swatch.thumb} /></a>
+        <div className="item-content">
+          <span>{swatch.swatch_name}</span>
+          { cart_item ? (
+            <button className="remove-swatch-btn" onClick={() => dispatch(removeCartItem({id: swatch.post_id}))} >Remove</button>
+          ) : (
+            <button className="add-swatch-btn" onClick={() => dispatch(addToCart({item: swatch, quantity: 1}))} >Order swatch</button>
+          ) }
         </div>
-      )
-    })
+      </div>
+    )
+  }
+
+  const LoopSwatch = ({swatches}: {swatches: SampleItem[]}) => {
+    console.log(swatches)
+    return (
+      <div className="grid-border material-container">
+        <div className="clearfix grid-border-inner">
+        { swatches.map((item, index) => <SwatchItem key={index} {...item} />) }
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="content-page">
       <div className="container">
-      { props.data.map((item, index) => (
-        <React.Fragment key={index}>
-          <h3>{item.info.collection_name}</h3>
-          <h4>PRICE GROUP: {item.info.price_group}$</h4>
-          <div className="grid-border material-container">
-            <div className="clearfix grid-border-inner">
-              { renderSwatches(item.swatches) }
-            </div>
-          </div>
-        </React.Fragment>
-      )) }
+      { props.data.map((item, index) => {
+        if (item.swatches.length > 0) {
+          return (
+            <React.Fragment key={index}>
+              <h3>{item.info.collection_name}</h3>
+              <h4>PRICE GROUP: {item.info.price_group}$</h4>
+              <LoopSwatch swatches={item.swatches} />
+            </React.Fragment>
+          )
+        }  
+      })}
       </div>
     </div>
   )

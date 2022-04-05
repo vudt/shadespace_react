@@ -5,6 +5,7 @@ import LoadingSpin from "react-loading-spin";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { userLogin, clearError } from "../../redux/authSlice";
 import { ParamsLogin } from "../../interfaces/auth";
+import HelperService from "../../services/helper";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
@@ -21,39 +22,28 @@ const LoginForm = () => {
   const { addToast, removeAllToasts } = useToasts();
 
   const onSubmit = handleSubmit(async(data) => {
-    try {
-      dispatch(clearError())
-      const result = await dispatch(userLogin(data)).unwrap()
-      if (result.token) {
-        router.push('/checkout')
-      }
-    } catch (error) {
-      console.log(error)
+    removeAllToasts()
+    dispatch(clearError())
+    const result = await dispatch(userLogin(data)).unwrap()
+    if (result.token) {
+      router.push('/checkout')
     }
   })
 
   useEffect(() => {
     removeAllToasts()
+    // show error login
     if (errorMessage) {
-      let text = errorMessage
-      addToast(text, { appearance: 'error', autoDismiss: true })
+      addToast(errorMessage, { appearance: 'error', autoDismiss: true })
     }
   }, [errorMessage])
-
-  const validate_email_field = {
-    required: "Please input your email",
-    pattern: {
-      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, 
-      message: "Invalid email address"
-    }
-  }
 
   return (
     <div>
       <form onSubmit={onSubmit} className="form">
         <div className="form-group">
           <label>Email</label>
-          <input type="text" {...register("username", validate_email_field)} className="form-control" />
+          <input type="text" {...register("username", HelperService.validate_email_field)} className="form-control" />
           { errors.username && <ErrorMessage>{errors.username.message}</ErrorMessage> }
         </div>
         <div className="form-group">

@@ -39,7 +39,6 @@ function useFetchData<T>(url: string, options?: {}) {
         if (!lock) dispatch({type: 'FETCH_SUCCESS', payload: JSON.parse(response.data)})
       } else {
         if (!lock) {
-          console.log(response)
           dispatch({type: 'FETCH_FAILURE', payload: response.description || response.message})
           addToast(response.description || response.message, { appearance: 'error', autoDismiss: false });
         }
