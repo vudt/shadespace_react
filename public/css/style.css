@@ -684,6 +684,10 @@ p {
     flex-shrink: 0;
 }
 
+.input--error {
+    border: 1px solid red !important;
+}
+
 @media only screen and (min-width: 320px) {
     .slide-item {
         height: 225px;

@@ -28,19 +28,28 @@ function useFetchData<T>(url: string, options?: {}) {
   const [endPoint, setEndPoint] = useState(url)
   const executeFetch = (url: string) => {setEndPoint(url)}
   const [state, dispatch] = useReducer<Reducer<State<T>, ActionTypes<T>>>(dataFetchReducer, initialState);
-  let lock = false
+  
   useEffect(() => {
-    (async () => {
+    let lock = false
+    console.log(endPoint)
+    const handleRequest = async() => {
       dispatch({type: 'FETCH_INIT'})
       const response = await pageAPI.request(endPoint, options)
       if (response.data) {
         if (!lock) dispatch({type: 'FETCH_SUCCESS', payload: JSON.parse(response.data)})
       } else {
-        dispatch({type: 'FETCH_FAILURE', payload: response.description})
-        addToast(response.description, { appearance: 'error', autoDismiss: false });
+        if (!lock) {
+          console.log(response)
+          dispatch({type: 'FETCH_FAILURE', payload: response.description || response.message})
+          addToast(response.description || response.message, { appearance: 'error', autoDismiss: false });
+        }
       }
-    })();
+    }
 
+    if (endPoint) { 
+      handleRequest() 
+    }
+    
     return () => {
       lock = true
     }
