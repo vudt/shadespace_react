@@ -27,8 +27,8 @@ const LoopCartItem = (props: {cart: CartData}) => {
   const dispatch = useAppDispatch()
   const [showModal, setShowModal] = useState<boolean>(false)
   
-  const renderCart = () => {
-    return props.cart.items.map((item, key) => (
+  const RenderCart = () => {
+    const element = props.cart.items.map((item, key) => (
       <div key={item.id} className="item-col-2 item-grid cart-item">
         <a className="full-img">
           <img src={item.thumbnail} />
@@ -39,9 +39,11 @@ const LoopCartItem = (props: {cart: CartData}) => {
         </div>
       </div>
     ))
+
+    return <>{element}</>
   }
 
-  const renderButton = () => {
+  const RenderButton = () => {
     return (
       <>
         <div className="clearfix"></div>
@@ -79,7 +81,10 @@ const LoopCartItem = (props: {cart: CartData}) => {
           <div className="clearfix grid-border-inner">
             <div className="clearfix">
               { props.cart.items.length > 0 ? (
-                [renderCart(), renderButton()]
+                <>
+                <RenderCart />
+                <RenderButton />
+                </>
                ) : (
                 <p>There is no item in cart.</p>
               )}

@@ -22,7 +22,7 @@ const GridBorder = ({listItems}: {listItems: GridItem[]}) => {
     <div className="section">
       <div className="container grid-border">
         <div className="clearfix grid-border-inner">
-          { listItems.map((item, index) => <LoopItem key={index} {...item} />) }
+          { listItems.length > 0 && listItems.map((item, index) => <LoopItem key={index} {...item} />) }
         </div>
       </div>
     </div>

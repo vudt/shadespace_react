@@ -76,7 +76,6 @@ const CheckoutForm = (props: TypeProps) => {
   useEffect(() => {
     removeAllToasts()
     // show error
-    console.log(errors)
     if (errors) {
       lodash.forEach(errors, (item) => {
         if (item?.message) {

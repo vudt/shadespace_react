@@ -91,7 +91,7 @@ const authSlice = createSlice({
     }),
     builder.addCase(getUserInfo.rejected, (state, action) => {
       sessionStorage.removeItem('token')
-      return {...initialState, errorMessage: ''}
+      return {...initialState, errorMessage: 'User is not valid.'}
     })
   }
 })

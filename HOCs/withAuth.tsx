@@ -13,7 +13,7 @@ const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protec
     const router = useRouter()
     const dispatch = useAppDispatch()
     const [prevent, setPrevent] = useState<boolean>(true);
-    const {isLogged, isLoading, userInfo} = useAppSelector(state => state.auth)
+    const {isLogged, isLoading, errorMessage, userInfo} = useAppSelector(state => state.auth)
     
     useEffect(() => {
       const accessToken = sessionStorage.getItem('token')
@@ -34,11 +34,11 @@ const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protec
         if (isLogged) {
           nProgress.done()
           setPrevent(false)
-        } else {
-          // router.push('/cart')
+        } else if (errorMessage) {
+          window.location.href = "/cart";
         }
       }
-    }, [isLogged])
+    }, [isLogged, errorMessage])
 
     if ((isLoading || prevent) && protect) {
       
