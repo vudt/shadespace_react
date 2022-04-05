@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { getUserInfo } from "../redux/authSlice";
 import Loading from "../components/loading";
 import MetaTag from "../components/meta-tag";
+import 'nprogress/nprogress.css'
+import nProgress from "nprogress";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 
 const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protect: boolean = false) => {
@@ -12,10 +14,11 @@ const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protec
     const dispatch = useAppDispatch()
     const [prevent, setPrevent] = useState<boolean>(true);
     const {isLogged, isLoading, userInfo} = useAppSelector(state => state.auth)
-
+    
     useEffect(() => {
       const accessToken = sessionStorage.getItem('token')
       if (protect) {
+        nProgress.configure({showSpinner: false}).start()
         if (!accessToken) {
           router.push('/cart')
         } else if(accessToken !== userInfo.token){
@@ -29,6 +32,7 @@ const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protec
     useEffect(() => {
       if (protect) {
         if (isLogged) {
+          nProgress.done()
           setPrevent(false)
         } else {
           // router.push('/cart')
@@ -37,10 +41,11 @@ const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protec
     }, [isLogged])
 
     if ((isLoading || prevent) && protect) {
+      
       return (
         <>
           <MetaTag />
-          <Loading />
+          {/* <Loading /> */}
         </>
       )
     }
