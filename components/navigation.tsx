@@ -22,7 +22,7 @@ const Navigation = () => {
       let value = e.target.classList.value
       if (value) {
         let arr_className = value.split(" ")
-        if (!arr_className.includes('menu') || !arr_className.includes('fa-close')) {
+        if (arr_className.includes('menu') || arr_className.includes('fa-close')) {
           return false;
         }
       }
