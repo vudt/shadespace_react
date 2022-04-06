@@ -16,6 +16,27 @@ const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protec
     const {isLogged, isLoading, errorMessage, userInfo} = useAppSelector(state => state.auth)
     
     useEffect(() => {
+     
+      // (async () => {
+      //   const accessToken = sessionStorage.getItem('token')
+
+      //   if (protect) {
+      //     nProgress.configure({showSpinner: false}).start()
+      //     if (!accessToken) {
+      //       router.push('/cart')
+      //     } else if(accessToken !== userInfo.token){
+      //       const result = await dispatch(getUserInfo()).unwrap()
+      //       if (result.data) {
+      //         nProgress.done()
+      //         setPrevent(false)
+      //       }
+      //       console.log(result.data)
+      //     }
+      //   } else if (accessToken && !isLogged) {
+      //     dispatch(getUserInfo())
+      //   }
+      // })()
+
       const accessToken = sessionStorage.getItem('token')
       if (protect) {
         nProgress.configure({showSpinner: false}).start()
@@ -35,13 +56,14 @@ const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protec
           nProgress.done()
           setPrevent(false)
         } else if (errorMessage) {
-          window.location.href = "/cart";
+          router.push('/cart')
         }
       }
     }, [isLogged, errorMessage])
 
     if ((isLoading || prevent) && protect) {
-      
+      console.log(isLoading)
+      console.log(prevent)
       return (
         <>
           <MetaTag />

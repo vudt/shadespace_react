@@ -554,13 +554,19 @@ p {
 }
 
 .back-buttons {
-    height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-.mobile-btn.back-btn {
+.back-buttons .mobile-btn {
+    flex-basis: 49%;
+}
+
+/* .mobile-btn.back-btn {
     float: left;
     margin-right: 2%;
-}
+} */
 
 .sortable-handler {
     touch-action: none;
@@ -686,6 +692,21 @@ p {
 
 .input--error {
     border: 1px solid red !important;
+}
+
+/* Custom menu */
+.cbp-spmenu-push-toleft {
+    left: 0 !important;
+}
+
+.cbp-spmenu-right {
+    width: 240px;
+    left: -240px;
+}
+
+.cbp-spmenu-right.cbp-spmenu-open {
+    left: 0;
+    right: auto;
 }
 
 @media only screen and (min-width: 320px) {

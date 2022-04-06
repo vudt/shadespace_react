@@ -17,7 +17,6 @@ const Checkout: NextPage = () => {
 
   useEffect(() => {
     if (cart.data.items.length == 0) {
-      console.log('xx')
       if (isRedirect) router.push('/cart')
     }
   }, [])

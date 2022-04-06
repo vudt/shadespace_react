@@ -14,11 +14,16 @@ const ErrorMessage = styled.p `
   color: red;
 ` 
 
-const LoginForm = () => {
+interface TypeProps {
+  setShowModalLogin: (value: boolean) => void,
+  setShowModalSignup: (value: boolean) => void
+}
+
+const LoginForm = (props: TypeProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const {errorMessage, isLogged} = useAppSelector(state => state.auth)
-  const { register, handleSubmit, formState: {errors, isSubmitting} } = useForm<ParamsLogin>();
+  const { register, handleSubmit, formState: {errors, isSubmitting, isSubmitSuccessful} } = useForm<ParamsLogin>();
   const { addToast, removeAllToasts } = useToasts();
 
   const onSubmit = handleSubmit(async(data) => {
@@ -31,12 +36,18 @@ const LoginForm = () => {
   })
 
   useEffect(() => {
-    removeAllToasts()
     // show error login
     if (errorMessage) {
+      removeAllToasts()
       addToast(errorMessage, { appearance: 'error', autoDismiss: true })
+      dispatch(clearError())
     }
   }, [errorMessage])
+
+  const transitionPage = () => {
+    props.setShowModalLogin(false)
+    props.setShowModalSignup(true)
+  }
 
   return (
     <div>
@@ -56,7 +67,7 @@ const LoginForm = () => {
         </button>
       </form>
       <div className="register-now">
-        <a>Register now</a>
+        <a onClick={() => transitionPage()}>Register now</a>
       </div>
     </div>
   )

@@ -7,6 +7,7 @@ import { toggleNav } from "../redux/navigationSlice";
 const Header = () => {
   const dispatch = useAppDispatch()
   const { cart } = useAppSelector(state => state)
+  const { active } = useAppSelector(state => state.navigation)
   const [totalQuantity, setTotalQuantity] = useState<number>(0)
 
   useEffect(()=> {
@@ -35,7 +36,7 @@ const Header = () => {
             </a>
           </Link>
           <a id="showRightPush" className="menu ui-link" onClick={toggleMenu}>
-            <i className="fa fa-bars" />
+            {active ? (<i className="fa fa-close" />) : (<i className="fa fa-bars" />)}
           </a>
         </div>
       </div>

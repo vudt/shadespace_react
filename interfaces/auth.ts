@@ -23,3 +23,10 @@ export interface ParamsLogin {
   username: string,
   password: string
 }
+
+export interface ParamsSignup {
+  first_name: string,
+  last_name: string,
+  email: string,
+  password: string
+}

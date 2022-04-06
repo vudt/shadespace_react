@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { removeCartItem } from "../../redux/cartSlice";
 import Modal from 'react-modal';
 import LoginForm from "../forms/login-form";
+import SignupForm from "../forms/signup-form";
 import { clearError } from "../../redux/authSlice";
 import { CartData } from "../../interfaces/cart";
 import { useRouter } from "next/router";
@@ -10,7 +11,7 @@ import { useRouter } from "next/router";
 const customStyles = {
   content: {
     width: '75%',
-    top: '20%',
+    top: '30%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',
@@ -23,9 +24,11 @@ const customStyles = {
 Modal.setAppElement('#__next');
 
 const LoopCartItem = (props: {cart: CartData}) => {
+  const {errorMessage} = useAppSelector(state => state.auth)
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const [showModal, setShowModal] = useState<boolean>(false)
+  const [showModalLogin, setShowModalLogin] = useState<boolean>(false)
+  const [showModalSignup, setShowModalSignup] = useState<boolean>(false)
   
   const RenderCart = () => {
     const element = props.cart.items.map((item, key) => (
@@ -57,21 +60,26 @@ const LoopCartItem = (props: {cart: CartData}) => {
   }
 
   const beforeSendSwatches = () => {
+    if (errorMessage) {
+      dispatch(clearError())
+    }
     const accessToken = sessionStorage.getItem('token')
     if (!accessToken) {
-      setShowModal(true)
+      setShowModalLogin(true)
     } else {
       router.push('/checkout')
     }
   }
 
-  function afterOpenModal() {
-    setShowModal(true);
+  const closeModalLogin = () => {
+    dispatch(clearError())
+    setShowModalLogin(false);
+    setShowModalSignup(false);
   }
 
-  function closeModal() {
-    dispatch(clearError())
-    setShowModal(false);
+  const closeModalSignup = () => {
+    setShowModalSignup(false);
+    setShowModalLogin(false);
   }
 
   return (
@@ -93,14 +101,25 @@ const LoopCartItem = (props: {cart: CartData}) => {
         </div>
         
         <Modal
-          isOpen={showModal}
-          onAfterOpen={afterOpenModal}
-          onRequestClose={closeModal}
+          isOpen={showModalLogin}
+          onAfterOpen={() => setShowModalLogin(true)}
+          onRequestClose={closeModalLogin}
           style={customStyles}
           contentLabel="Login"
         >
           <h3>Login</h3>
-          <LoginForm />
+          <LoginForm setShowModalLogin={setShowModalLogin} setShowModalSignup={setShowModalSignup} />
+        </Modal>
+
+        <Modal
+          isOpen={showModalSignup}
+          onAfterOpen={() => setShowModalSignup(true)}
+          onRequestClose={closeModalSignup}
+          style={customStyles}
+          contentLabel="Signup"
+        >
+          <h3>Signup</h3>
+          <SignupForm setShowModalLogin={setShowModalLogin} setShowModalSignup={setShowModalSignup} />
         </Modal>
 
       </div>

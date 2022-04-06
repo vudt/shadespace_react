@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { AuthState, ValidateAuth, UserInfo, ParamsLogin } from "../interfaces/auth";
+import { AuthState, ValidateAuth, UserInfo, ParamsLogin, ParamsSignup } from "../interfaces/auth";
 import pageApi from '../services/page';
 var qs = require('qs');
 
@@ -19,6 +19,26 @@ const initialState: AuthState = {
   },
   errorMessage: ''
 }
+
+export const userSignup = createAsyncThunk<UserInfo, ParamsSignup, {rejectValue: ValidationErrors}>(
+  'user/signup',
+  async(params, thunkApi) => {
+    console.log(qs.stringify(params))
+    const response = await pageApi.request("api/app/signup", {
+      method: 'POST',
+      data: params
+    })
+    console.log(response)
+    console.log(response.error)
+    if (response.error) {
+      return thunkApi.rejectWithValue({message: response.error})
+    }
+    // parse data response by custom api
+    console.log(response.data)
+    console.log(JSON.parse(response.data))
+    return JSON.parse(response.data)
+  }
+)
 
 export const userLogin = createAsyncThunk<UserInfo, ParamsLogin, {rejectValue: ValidationErrors}>(
   'user/login',
@@ -63,6 +83,18 @@ const authSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
+    builder.addCase(userSignup.pending, (state, _) => {
+      state.isLoading = true
+    }),
+    builder.addCase(userSignup.fulfilled, (state, action) => {
+      console.log(action.payload)
+      sessionStorage.setItem('token', action.payload.token!)
+      return {...state, isLogged: true, isLoading: false, userInfo: action.payload, errorMessage: ''}
+    }),
+    builder.addCase(userSignup.rejected, (state, action) => {
+      console.log(action.payload)
+      return {...initialState, errorMessage: action.payload?.message!}
+    })
     builder.addCase(userLogin.pending, (state, _) => {
       state.isLogged = false
       state.isLoading = true

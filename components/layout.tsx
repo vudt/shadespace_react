@@ -3,13 +3,12 @@ import Header from "./header";
 import Footer from "./footer";
 import Navigation from "./navigation";
 import { useRouter } from "next/router";
-import { useAppSelector, useAppDispatch } from "../redux/store";
-import { toggleNav, closeNav } from "../redux/navigationSlice";
+import { useAppDispatch } from "../redux/store";
+import { closeNav } from "../redux/navigationSlice";
 
 const Layout = (pageProps: any) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const { active } = useAppSelector(state => state.navigation)
   
   useEffect(() => {
     document.body.classList.add('cbp-spmenu-push')

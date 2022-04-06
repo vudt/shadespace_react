@@ -29,3 +29,22 @@ export const validate_email_field = {
     message: "Invalid email address"
   }
 }
+
+export const validate_password_field = {
+  required: "Please input your password.", 
+  minLength: { 
+    value: 6, 
+    message: "Password must have at least 6 characters."
+  },
+  maxLength: {
+    value: 20,
+    message: "Password must have from 6 - 20 characters."
+  }
+}
+
+export const validate_confirm_password = (confirm_password: string, password:string): boolean | string => {
+  if (confirm_password != password) {
+    return "The password does not match"
+  }
+  return true
+}

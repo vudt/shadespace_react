@@ -19,9 +19,10 @@ const Navigation = () => {
 
     dispatch(fetchNavigation())
     const checkIfClickOutside = (e: any) => {
-      if (e.target.className) {
-        let arr_className = e.target.className.split(" ")
-        if (arr_className.includes('menu') || arr_className.includes('fa-bars')) {
+      let value = e.target.classList.value
+      if (value) {
+        let arr_className = value.split(" ")
+        if (!arr_className.includes('menu') || !arr_className.includes('fa-close')) {
           return false;
         }
       }
