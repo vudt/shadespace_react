@@ -2,6 +2,7 @@ import React from "react";
 import { MeasurementResponse, IMeasureMent } from "../../../interfaces/page";
 
 const MeasurePanel = ({data, index}: {data: IMeasureMent, index: number}) => {
+  
   const PanelHeading = ({index, name} : {index: number, name: string}) => {
     return (
       <div className="panel-heading">

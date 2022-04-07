@@ -694,6 +694,10 @@ p {
     border: 1px solid red !important;
 }
 
+.item-grid img {
+    width: 100%;
+}
+
 /* Custom menu */
 .cbp-spmenu-push-toleft {
     left: 0 !important;

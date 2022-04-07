@@ -87,7 +87,6 @@ const LoopCartItem = (props: {cart: CartData}) => {
       <div className="container">
         <div className="grid-border material-container">
           <div className="clearfix grid-border-inner">
-            <div className="clearfix">
               { props.cart.items.length > 0 ? (
                 <>
                 <RenderCart />
@@ -96,7 +95,6 @@ const LoopCartItem = (props: {cart: CartData}) => {
                ) : (
                 <p>There is no item in cart.</p>
               )}
-            </div>
           </div>
         </div>
         

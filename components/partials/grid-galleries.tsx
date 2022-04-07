@@ -9,9 +9,10 @@ interface IConfigLightbox {
 }
 
 const GridGalleries = ({data}: {data: GalleryItem[]}) => {
-
   const [configLightbox, setConfigLightbox] = useState<IConfigLightbox>({photoIndex: 0, isOpen: false})
-  
+  const nextIndex: any = (configLightbox.photoIndex + 1) % data.length
+  const prevIndex: any = (configLightbox.photoIndex + data.length -1) % data.length
+
   const LoopGallery = ({item, index}: {item: GalleryItem, index: number}) => {
     return (
       <div onClick={() => setConfigLightbox({isOpen: true, photoIndex: index})} className="item-col-2 item-grid square-bg" style={{ backgroundImage: `url(${item.url})` }}>
@@ -19,10 +20,7 @@ const GridGalleries = ({data}: {data: GalleryItem[]}) => {
       </div>
     )
   }
-
-  const nextIndex: any = (configLightbox.photoIndex + 1) % data.length
-  const prevIndex: any = (configLightbox.photoIndex + data.length -1) % data.length
-
+  
   return (
     <div className="section">
       <div className="container grid-border">

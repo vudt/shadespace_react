@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 
 interface PropsButton {
@@ -7,11 +8,12 @@ interface PropsButton {
 }
 
 const BottomButton = (props: PropsButton) => {
+  const router = useRouter()
   return (
     <div className="section">
       <div className="container">
         <div className="back-buttons">
-          <a className="mobile-btn inline medium back-btn ui-link">Back</a>
+          <a onClick={() => router.back()} className="mobile-btn inline medium back-btn ui-link">Back</a>
           <Link href={props.link}><a className="mobile-btn inline medium right ui-link">{props.title}</a></Link>
         </div>
       </div>
