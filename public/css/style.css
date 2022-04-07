@@ -698,6 +698,14 @@ p {
     width: 100%;
 }
 
+.grid-border {
+    min-height: 180px;
+}
+
+.cat-collection-item .item-desc p {
+    overflow: hidden !important;
+}
+
 /* Custom menu */
 .cbp-spmenu-push-toleft {
     left: 0 !important;

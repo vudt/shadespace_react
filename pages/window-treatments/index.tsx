@@ -1,7 +1,7 @@
 import React from "react";
 import type { NextPage } from 'next'
 import useFetchData from "../../hooks/fetch-data";
-import Loading from '../../components/loading';
+import LoadingCard from "../../components/partials/skeleton/loading-card";
 import BreadCrumb from "../../components/partials/breadcrumb";
 import PageContent from "../../components/partials/page-content";
 import GridBorder from "../../components/partials/grid-border";
@@ -16,7 +16,7 @@ const WindowTreatMents: NextPage = (props) => {
   const response = useFetchData<GridItem[]>('api/app/get_term_window_treatments', 'GET_WINDOW_TREATMENTS')
 
   const DisplayContent = () => {
-    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.isFetching || !response.state.data) return <LoadingCard count={6} />
     if (response.state.data.length === 0) return <SPAlert text="Data not found." />
     return <GridBorder listItems={response.state.data} />
   }

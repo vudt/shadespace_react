@@ -22,9 +22,9 @@ const Header = () => {
 
   return (
     <header className="header">
-      <a className="logo" href="/mobile">
-        <img src="/img/logo.png" />
-      </a>
+      <Link href="/">
+        <a className="logo"><img src="/img/logo.png" /></a>
+      </Link>
       <div className="header-right inline-block-wrap">
         <div className="action-btns inline-block-item">
           <Link href="/cart">

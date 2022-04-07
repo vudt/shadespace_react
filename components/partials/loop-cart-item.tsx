@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { removeCartItem } from "../../redux/cartSlice";
 import Modal from 'react-modal';
+import WrapSection from "../wrap-section";
 import LoginForm from "../forms/login-form";
 import SignupForm from "../forms/signup-form";
 import { clearError } from "../../redux/authSlice";
@@ -24,7 +25,7 @@ const customStyles = {
 Modal.setAppElement('#__next');
 
 const LoopCartItem = (props: {cart: CartData}) => {
-  const {errorMessage} = useAppSelector(state => state.auth)
+  const {errorMessage, isLogged} = useAppSelector(state => state.auth)
   const router = useRouter()
   const dispatch = useAppDispatch()
   const [showModalLogin, setShowModalLogin] = useState<boolean>(false)
@@ -64,10 +65,10 @@ const LoopCartItem = (props: {cart: CartData}) => {
       dispatch(clearError())
     }
     const accessToken = sessionStorage.getItem('token')
-    if (!accessToken) {
-      setShowModalLogin(true)
-    } else {
+    if (accessToken && isLogged) {
       router.push('/checkout')
+    } else {
+      setShowModalLogin(true)
     }
   }
 
@@ -83,45 +84,38 @@ const LoopCartItem = (props: {cart: CartData}) => {
   }
 
   return (
-    <div className="section">
-      <div className="container">
-        <div className="grid-border material-container">
-          <div className="clearfix grid-border-inner">
-              { props.cart.items.length > 0 ? (
-                <>
-                <RenderCart />
-                <RenderButton />
-                </>
-               ) : (
-                <p>There is no item in cart.</p>
-              )}
-          </div>
-        </div>
-        
-        <Modal
-          isOpen={showModalLogin}
-          onAfterOpen={() => setShowModalLogin(true)}
-          onRequestClose={closeModalLogin}
-          style={customStyles}
-          contentLabel="Login"
-        >
-          <h3>Login</h3>
-          <LoginForm setShowModalLogin={setShowModalLogin} setShowModalSignup={setShowModalSignup} />
-        </Modal>
+    <WrapSection>
+      { props.cart.items.length > 0 ? (
+        <>
+          <RenderCart />
+          <RenderButton />
+        </>
+      ) : (
+        <p>There is no item in cart.</p>
+      )}
 
-        <Modal
-          isOpen={showModalSignup}
-          onAfterOpen={() => setShowModalSignup(true)}
-          onRequestClose={closeModalSignup}
-          style={customStyles}
-          contentLabel="Signup"
-        >
-          <h3>Signup</h3>
-          <SignupForm setShowModalLogin={setShowModalLogin} setShowModalSignup={setShowModalSignup} />
-        </Modal>
+      <Modal
+        isOpen={showModalLogin}
+        onAfterOpen={() => setShowModalLogin(true)}
+        onRequestClose={closeModalLogin}
+        style={customStyles}
+        contentLabel="Login"
+      >
+        <h3>Login</h3>
+        <LoginForm setShowModalLogin={setShowModalLogin} setShowModalSignup={setShowModalSignup} />
+      </Modal>
 
-      </div>
-    </div>
+      <Modal
+        isOpen={showModalSignup}
+        onAfterOpen={() => setShowModalSignup(true)}
+        onRequestClose={closeModalSignup}
+        style={customStyles}
+        contentLabel="Signup"
+      >
+        <h3>Signup</h3>
+        <SignupForm setShowModalLogin={setShowModalLogin} setShowModalSignup={setShowModalSignup} />
+      </Modal>
+    </WrapSection>
   )
 }
 

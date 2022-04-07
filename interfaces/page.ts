@@ -1,3 +1,9 @@
+export interface Navigation {
+  id: number,
+  name: string,
+  template: string
+}
+
 export interface PageMeta {
   post_title: string,
   post_content: string | ''

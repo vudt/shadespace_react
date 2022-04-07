@@ -1,31 +1,29 @@
 import React from "react";
 import Link from "next/link";
+import WrapSection from "../wrap-section";
 import { GridItem } from "../../interfaces/page";
 
 const GridBorder = ({listItems}: {listItems: GridItem[]}) => {
 
-  const LoopItem = (item: GridItem) => {
-    return (
-      <div className="item-col-2 item-grid square-bg" style={{ backgroundImage: `url(${item.img})` }}>
-        <Link href={item.link || ''}>
-          {item.name ? (
-            <a><span className="item-name">{item.name.replace(/#038;/, "")}</span></a>  
-          ) : (
-            <a></a>
-          )}
+  const LoopItem = () => {
+    const element = listItems.map((item, index) => (
+      <div key={index} className="item-col-2 item-grid square-bg" style={{ backgroundImage: `url(${item.img})` }}>
+        <Link href={item.link!}>
+          <a>
+            {item.name && (
+              <span className="item-name">{item.name.replace(/#038;/, "")}</span>
+            )}
+          </a>  
         </Link>
       </div>
-    )
+    ))
+    return <>{element}</>
   }
 
   return (
-    <div className="section">
-      <div className="container grid-border">
-        <div className="clearfix grid-border-inner">
-          { listItems.length > 0 && listItems.map((item, index) => <LoopItem key={index} {...item} />) }
-        </div>
-      </div>
-    </div>
+    <WrapSection>
+      <LoopItem />
+    </WrapSection>
   )
 }
 

@@ -24,7 +24,7 @@ export const fetchNavigation = createAsyncThunk('user/navigation', async(_, thun
   if (response.data) {
     return JSON.parse(response.data)
   } else {
-    return thunkApi.rejectWithValue({message: 'Api error'})
+    return thunkApi.rejectWithValue({message: response.error})
   }
 })
 

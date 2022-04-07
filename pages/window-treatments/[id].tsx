@@ -9,6 +9,7 @@ import { PageMeta, GridItem } from "../../interfaces/page";
 import MetaTag from "../../components/meta-tag";
 import BottomButton from "../../components/partials/bottom-button";
 import withAuth from "../../HOCs/withAuth";
+import LoadingCard from "../../components/partials/skeleton/loading-card";
 import GridBorder from "../../components/partials/grid-border";
 import SPAlert from "../../components/error-message";
 import { useRouter } from "next/router";
@@ -31,7 +32,7 @@ const WindowTreatMentItem: NextPage<PageProps> = ({id, pageMeta}) => {
   }, [router.query])
 
   const DisplayContent = () => {
-    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.isFetching || !response.state.data) return <LoadingCard count={4} />
     if (response.state.data.length === 0) return <SPAlert text="Data not found." />
     return <GridBorder listItems={response.state.data} />
   }

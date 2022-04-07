@@ -7,9 +7,9 @@ interface CollectionItemProps {
 
 const LoopCollectionItem = ({dataCollection}: CollectionItemProps) => {
 
-  const CollectionItem = ({item, index}: {item: ICollectionItem, index: number}) => {
+  const CollectionItem = ({item}: {item: ICollectionItem}) => {
     return (
-      <div key={index} className="cat-collection-item">
+      <div className="cat-collection-item">
         <a href={item.link} target="_blank">
           <img src={item.img} />
         </a>
@@ -30,7 +30,7 @@ const LoopCollectionItem = ({dataCollection}: CollectionItemProps) => {
   return (
     <div className="content-page">
       <div className="container">
-        {dataCollection.map((item, index) => <CollectionItem item={item} index={index} />)}
+        {dataCollection.map((item, index) => <CollectionItem key={index} item={item}  />)}
       </div>
     </div>
   )

@@ -6,7 +6,7 @@ import GridBorder from "../components/partials/grid-border";
 import { GridItem, TermItem, PageMeta } from "../interfaces/page";
 import MetaTag from "../components/meta-tag";
 import pageAPI from "../services/page";
-import Loading from '../components/loading';
+import LoadingCard from "../components/partials/skeleton/loading-card";
 import BottomButton from "../components/partials/bottom-button";
 import withAuth from "../HOCs/withAuth";
 import SPAlert from "../components/error-message";
@@ -36,7 +36,7 @@ const FreeSwatches: NextPage<PageProps> = (props) => {
   }
 
   const DisplayContent = () => {
-    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.isFetching || !response.state.data) return <LoadingCard count={4} />
     if (response.state.data.length === 0) return <SPAlert text="Data not found." />
     return <GridBorder listItems={formatData(response.state.data)} />
   }

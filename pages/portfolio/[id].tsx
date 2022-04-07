@@ -3,10 +3,10 @@ import type { NextPage } from 'next'
 import pageAPI from "../../services/page";
 import BreadCrumb from "../../components/partials/breadcrumb";
 import PageContent from "../../components/partials/page-content";
-import Loading from '../../components/loading';
 import BottomButton from "../../components/partials/bottom-button";
 import GridGalleries from "../../components/partials/grid-galleries";
 import { TermMeta, GalleryItem } from "../../interfaces/page";
+import LoadingCard from "../../components/partials/skeleton/loading-card";
 import MetaTag from "../../components/meta-tag";
 import withAuth from "../../HOCs/withAuth";
 import useFetchData from "../../hooks/fetch-data";
@@ -28,7 +28,7 @@ const SinglePortfolio: NextPage<PageProps> = ({id, pageMeta}) => {
   }, [router.query])
 
   const DisplayContent = () => {
-    if (response.state.isFetching || !response.state.data) return <Loading />
+    if (response.state.isFetching || !response.state.data) return <LoadingCard count={6} />
     if (response.state.data.length === 0) return <SPAlert text="Data not found." />
     return <GridGalleries data={response.state.data} />
   }

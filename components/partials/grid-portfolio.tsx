@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import WrapSection from "./wrap-section";
+import WrapSection from "../wrap-section";
 import { Portfolio } from "../../interfaces/page";
 
 const GridPortfolio = (props: {data: Portfolio[]}) => {
