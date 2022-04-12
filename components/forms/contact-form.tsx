@@ -39,11 +39,11 @@ const ContactForm = () => {
   })
 
   useEffect(() => {
-    removeAllToasts()
     // show error
     if (errors) {
       lodash.forEach(errors, (item) => {
         if (item?.message) {
+          removeAllToasts()
           addToast(item.message, {appearance: "error", autoDismiss: true})
           return false
         }
@@ -82,4 +82,4 @@ const ContactForm = () => {
   )
 }
 
-export default withAuth(ContactForm)
+export default ContactForm

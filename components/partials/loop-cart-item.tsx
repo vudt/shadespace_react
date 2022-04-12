@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 const customStyles = {
   content: {
     width: '75%',
-    top: '30%',
+    top: '33%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',
@@ -34,9 +34,7 @@ const LoopCartItem = (props: {cart: CartData}) => {
   const RenderCart = () => {
     const element = props.cart.items.map((item, key) => (
       <div key={item.id} className="item-col-2 item-grid cart-item">
-        <a className="full-img">
-          <img src={item.thumbnail} />
-        </a>
+        <a className="full-img"><img src={item.thumbnail} /></a>
         <div className="item-content">
           <span>{item.name}</span>
           <button className="remove-swatch-btn" onClick={() => dispatch(removeCartItem({id: item.id}))}>Remove</button>
@@ -52,9 +50,7 @@ const LoopCartItem = (props: {cart: CartData}) => {
       <>
         <div className="clearfix"></div>
         <div className="form">
-          <a onClick={() => beforeSendSwatches()} className="button display-block send-watch">
-            Send swatches
-          </a>
+          <a onClick={() => beforeSendSwatches()} className="button display-block send-watch">Send swatches</a>
         </div>
       </>
     )
@@ -66,7 +62,7 @@ const LoopCartItem = (props: {cart: CartData}) => {
     }
     const accessToken = sessionStorage.getItem('token')
     if (accessToken && isLogged) {
-      router.push('/checkout')
+      router.push(`/checkout`)
     } else {
       setShowModalLogin(true)
     }
@@ -79,6 +75,7 @@ const LoopCartItem = (props: {cart: CartData}) => {
   }
 
   const closeModalSignup = () => {
+    dispatch(clearError())
     setShowModalSignup(false);
     setShowModalLogin(false);
   }
@@ -99,7 +96,6 @@ const LoopCartItem = (props: {cart: CartData}) => {
         onAfterOpen={() => setShowModalLogin(true)}
         onRequestClose={closeModalLogin}
         style={customStyles}
-        contentLabel="Login"
       >
         <h3>Login</h3>
         <LoginForm setShowModalLogin={setShowModalLogin} setShowModalSignup={setShowModalSignup} />
@@ -110,7 +106,6 @@ const LoopCartItem = (props: {cart: CartData}) => {
         onAfterOpen={() => setShowModalSignup(true)}
         onRequestClose={closeModalSignup}
         style={customStyles}
-        contentLabel="Signup"
       >
         <h3>Signup</h3>
         <SignupForm setShowModalLogin={setShowModalLogin} setShowModalSignup={setShowModalSignup} />

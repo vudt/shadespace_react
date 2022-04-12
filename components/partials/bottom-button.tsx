@@ -23,7 +23,7 @@ const BottomButton = (props: PropsButton) => {
 
 BottomButton.defaultProps = {
   title: "Home",
-  link: "/mobile"
+  link: process.env.HOME_URL
 }
 
 export default BottomButton

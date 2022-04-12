@@ -1,10 +1,13 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production'
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    HOME_URL: 'http://localhost:3000',
-    BASE_URL: 'https://shadespace.com.sg'
-  }
+    HOME_URL: isProd ? 'https://dangtuanvu.com/app' : 'http://localhost:3000',
+    BASE_URL: 'https://shadespace.com.sg',
+    PREFIX_URL: isProd ? 'app' : '',
+  },
+  assetPrefix: isProd ? 'app' : '',
 }
 
 module.exports = nextConfig

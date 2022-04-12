@@ -11,12 +11,12 @@ const PageContent = (props: PageContentProps) => {
       <div className="container page-desc">
         <h1>{props.title}</h1>
         { props.description && 
-          <div className="page-content" dangerouslySetInnerHTML={{__html: props.description.replaceAll("\\'", "'")}}></div>
+          <div className="page-content" dangerouslySetInnerHTML={{__html: props.description}}></div>
         }
       </div>
       { props.content && 
         <div className="content-page">
-          <div className="container" dangerouslySetInnerHTML={{__html: props.content.replaceAll("\\'", "'")}}></div>
+          <div className="container" dangerouslySetInnerHTML={{__html: props.content}}></div>
         </div>
       }
     </div>

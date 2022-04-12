@@ -32,7 +32,7 @@ const Checkout: NextPage = () => {
         <CheckoutForm setRedirect={setRedirect} /> 
       ) : (
         <WrapperLoading>
-          {[...Array(8)].map((i) => <LoadingFormItem /> )}
+          {[...Array(8)].map((_, i) => <LoadingFormItem key={i} /> )}
         </WrapperLoading>
       )}
     </>

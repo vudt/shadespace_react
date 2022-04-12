@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import type { NextPage } from 'next'
 import { useAppSelector } from "../../redux/store";
 import BreadCrumb from "../../components/partials/breadcrumb";
 import PageContent from "../../components/partials/page-content";
 import withAuth from "../../HOCs/withAuth";
+import pageAPI from '../../services/page'
 import MetaTag from "../../components/meta-tag";
 import BottomButton from "../../components/partials/bottom-button";
 import Loading from '../../components/loading';
@@ -16,7 +17,14 @@ const OrderHistory: NextPage = () => {
   const breadcrumb = [{name: "Orders", link: ''}]  
   const headingColumnText = ['ORDER NUMBER', 'STATUS', 'SWATCHES', 'PRODUCTS', 'TOTAL', 'DATE']
   const {userInfo} = useAppSelector(state => state.auth)
-  const response = useFetchData<IOrder[]>('api/app/order_history', {headers: {'Authorization': userInfo.token}})
+  const response = useFetchData<IOrder[]>('')
+
+  useEffect(() => {
+    if (userInfo.token) {
+      response.setConfig({headers: {'Authorization': userInfo.token}})
+      response.executeFetch('api/app/order_history/')
+    }
+  }, [userInfo])
 
   const DisplayContent = () => {
     if (response.state.isFetching || !response.state.data) return <Loading />

@@ -4,7 +4,6 @@ import { BreadCrumbProps } from "../../interfaces/page";
 
 
 const BreadCrumb = (props: BreadCrumbProps) => {
-  const HOME_URL = 'http://localhost:3000'
   const renderBreadcumb = () => {
     return props.breadcrumb.map((item, index) => {
       if (item.link) {
@@ -24,7 +23,7 @@ const BreadCrumb = (props: BreadCrumbProps) => {
   return (
     <div className="section">
       <div className="container breadcrumb">
-        <Link href={HOME_URL}><a>Home  &gt;&gt; </a></Link>
+        <Link href={process.env.HOME_URL!}><a>Home  &gt;&gt; </a></Link>
         { renderBreadcumb() }
       </div>
     </div>

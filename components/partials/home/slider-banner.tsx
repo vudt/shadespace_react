@@ -38,8 +38,8 @@ const SliderBanner = () => {
           <div className="slide-note">
             <h4>COLORS DELIVERED TO YOUR DOORSTEP</h4>
             <p>
-              Want to view our range of swatches? <br />
-              We've got you covered.
+              {`Want to view our range of swatches? <br />
+              We've got you covered.`}
               <br />
             </p>
           </div>

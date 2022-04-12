@@ -17,6 +17,7 @@ const withAuth = <T extends {}>(WrappedComponent: React.ComponentType<T>, protec
         if (!accessToken) {
           router.push('/cart')
         } else if(accessToken !== userInfo.token){
+          console.log('validate_token')
           dispatch(getUserInfo())
         }
       } else if (accessToken && !isLogged) {

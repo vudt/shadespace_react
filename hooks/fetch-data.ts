@@ -26,6 +26,7 @@ interface ActionTypes<T> {
 function useFetchData<T>(url: string, options?: {}) {
   const { addToast } = useToasts();
   const [endPoint, setEndPoint] = useState(url)
+  const [config, setConfig] = useState(options)
   const executeFetch = (url: string) => {setEndPoint(url)}
   const [state, dispatch] = useReducer<Reducer<State<T>, ActionTypes<T>>>(dataFetchReducer, initialState);
   
@@ -33,8 +34,7 @@ function useFetchData<T>(url: string, options?: {}) {
     let lock = false
     const handleRequest = async() => {
       dispatch({type: 'FETCH_INIT'})
-      const response = await pageAPI.request(endPoint, options)
-      console.log('FETCH_INIT')
+      const response = await pageAPI.request(endPoint, config)
       if (response.data) {
         if (!lock) dispatch({type: 'FETCH_SUCCESS', payload: JSON.parse(response.data)})
       } else {
@@ -55,7 +55,7 @@ function useFetchData<T>(url: string, options?: {}) {
   }, [endPoint])
   
 
-  return {state, executeFetch}
+  return {state, executeFetch, setConfig}
 }
 
 export default useFetchData;

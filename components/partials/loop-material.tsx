@@ -1,6 +1,7 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { Cart } from "../../models/cart";
+import { useToasts } from "react-toast-notifications";
 import { addToCart, removeCartItem } from "../../redux/cartSlice";
 import { MaterialInfo, SampleItem } from "../../interfaces/material";
 
@@ -11,8 +12,18 @@ interface MaterialProps {
 
 const LoopMaterial = (props: {data: MaterialProps[]}) => {
   const dispatch = useAppDispatch()
+  const {addToast, removeAllToasts} = useToasts()
   const { cart } = useAppSelector(state => state)
   const cartModel = new Cart(cart.data)
+
+  const handleAddToCart = (swatch: SampleItem) => {
+    removeAllToasts();
+    if (cart.data.items.length >= 3) {
+      addToast("You can't add more than 3 items each time.", { appearance: 'error', autoDismiss: true })
+      return false
+    }
+    dispatch(addToCart({item: swatch, quantity: 1}))
+  }
 
   const SwatchItem = (swatch: SampleItem) => {
     let cart_item = cartModel.getCartItemById(swatch.post_id)
@@ -24,7 +35,7 @@ const LoopMaterial = (props: {data: MaterialProps[]}) => {
           { cart_item ? (
             <button className="remove-swatch-btn" onClick={() => dispatch(removeCartItem({id: swatch.post_id}))} >Remove</button>
           ) : (
-            <button className="add-swatch-btn" onClick={() => dispatch(addToCart({item: swatch, quantity: 1}))} >Order swatch</button>
+            <button className="add-swatch-btn" onClick={() => handleAddToCart(swatch)} >Order swatch</button>
           ) }
         </div>
       </div>

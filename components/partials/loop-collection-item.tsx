@@ -10,7 +10,7 @@ const LoopCollectionItem = ({dataCollection}: CollectionItemProps) => {
   const CollectionItem = ({item}: {item: ICollectionItem}) => {
     return (
       <div className="cat-collection-item">
-        <a href={item.link} target="_blank">
+        <a href={item.link} target="_blank" rel="noreferrer">
           <img src={item.img} />
         </a>
         <h4>{item.name}</h4>
@@ -21,7 +21,7 @@ const LoopCollectionItem = ({dataCollection}: CollectionItemProps) => {
           {item.price_from && 
             <div className="price" dangerouslySetInnerHTML={{__html: `Price from ${item.price_from}`}}></div>
           }
-          <a className="web-link" href={item.link} target="_blank">Full Site &gt;&gt;</a>
+          <a className="web-link" href={item.link} target="_blank" rel="noreferrer">Full Site &gt;&gt;</a>
         </div>
       </div>
     )

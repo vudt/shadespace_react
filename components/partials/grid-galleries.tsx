@@ -16,7 +16,7 @@ const GridGalleries = ({data}: {data: GalleryItem[]}) => {
 
   const LoopGallery = () => {
     const element = data.map((item, index) => (
-      <div onClick={() => setConfigLightbox({isOpen: true, photoIndex: index})} className="item-col-2 item-grid square-bg" style={{ backgroundImage: `url(${item.url})` }}>
+      <div key={index} onClick={() => setConfigLightbox({isOpen: true, photoIndex: index})} className="item-col-2 item-grid square-bg" style={{ backgroundImage: `url(${item.url})` }}>
          <img src={item.url} style={{display: 'none'}} />
       </div>
     ))

@@ -17,7 +17,7 @@ const MeasurePanel = ({data, index}: {data: IMeasureMent, index: number}) => {
   const Item = ({index, data}: {index: number, data: MeasurementResponse}) => {
     return (
       <div key={index} className="item-col-2 item-grid">
-        <a target="_blank" href={data.pdf} className="full-img" dangerouslySetInnerHTML={{__html: data.thumb || ''}}>    
+        <a target="_blank" rel="noreferrer" href={data.pdf} className="full-img" dangerouslySetInnerHTML={{__html: data.thumb || ''}}>    
         </a>
       </div>
     )
