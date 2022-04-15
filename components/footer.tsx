@@ -13,7 +13,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div id="full-site-bar">
-        <a href="https://shadespace.com.sg/?allow=true" target="_blank" className="turn-off-mobile btn btn-gray-flat btn-full-site ui-link">
+        <a href="https://shadespace.com.sg/?allow=true" rel="noreferrer" target="_blank" className="turn-off-mobile btn btn-gray-flat btn-full-site ui-link">
           VISIT FULL SITE
         </a>
       </div>

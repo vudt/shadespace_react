@@ -40,7 +40,7 @@ function useFetchData<T>(url: string, options?: {}) {
       } else {
         if (!lock) {
           dispatch({type: 'FETCH_FAILURE', payload: response.description || response.message})
-          addToast(response.description || response.message, { appearance: 'error', autoDismiss: false });
+          addToast(response.description || response.message, { appearance: 'error', autoDismiss: true });
         }
       }
     }

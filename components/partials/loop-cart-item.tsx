@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 const customStyles = {
   content: {
     width: '75%',
-    top: '33%',
+    top: '38%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',

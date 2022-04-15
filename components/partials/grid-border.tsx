@@ -4,7 +4,7 @@ import WrapSection from "../wrap-section";
 import { GridItem } from "../../interfaces/page";
 
 const GridBorder = ({listItems}: {listItems: GridItem[]}) => {
-
+  console.log('re-renders')
   const LoopItem = () => {
     const element = listItems.map((item, index) => (
       <div key={index} className="item-col-2 item-grid square-bg" style={{ backgroundImage: `url(${item.img})` }}>

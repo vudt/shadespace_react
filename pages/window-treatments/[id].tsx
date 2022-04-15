@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import type { NextPage } from 'next'
 import pageAPI from "../../services/page";
 import useFetchData from "../../hooks/fetch-data";
-import Loading from '../../components/loading';
 import BreadCrumb from "../../components/partials/breadcrumb";
 import PageContent from "../../components/partials/page-content";
 import { PageMeta, GridItem } from "../../interfaces/page";

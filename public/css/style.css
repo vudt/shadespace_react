@@ -719,6 +719,7 @@ p {
 .cbp-spmenu-right.cbp-spmenu-open {
     left: 0;
     right: auto;
+    z-index: 99999;
 }
 
 @media only screen and (min-width: 320px) {
