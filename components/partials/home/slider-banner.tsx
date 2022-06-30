@@ -16,7 +16,7 @@ const SliderBanner = () => {
   return (
     <Slider {...defaultSettings}>
         <a className="slide-item">
-          <div className="slide-bg" style={{ backgroundImage: 'url("https://shadespace.com.sg/mobile/sources/img/slide-1.jpg")'}}></div>
+          <div className="slide-bg" style={{ backgroundImage: 'url("https://shop.shadespace.com.sg/mobile/sources/img/slide-1.jpg")'}}></div>
           <div className="slide-note">
             <h4>BRING YOUR STYLE TO HOME</h4>
             <div>
@@ -31,10 +31,10 @@ const SliderBanner = () => {
           className="slide-item"
           style={{
             backgroundImage:
-              'url("https://shadespace.com.sg/mobile/sources/img/slide-2.jpg")'
+              'url("https://shop.shadespace.com.sg/mobile/sources/img/slide-2.jpg")'
           }}
         >
-          <div className="slide-bg" style={{ backgroundImage: 'url("https://shadespace.com.sg/mobile/sources/img/slide-2.jpg")'}}></div>
+          <div className="slide-bg" style={{ backgroundImage: 'url("https://shop.shadespace.com.sg/mobile/sources/img/slide-2.jpg")'}}></div>
           <div className="slide-note">
             <h4>COLORS DELIVERED TO YOUR DOORSTEP</h4>
             <p>
@@ -49,10 +49,10 @@ const SliderBanner = () => {
           className="slide-item"
           style={{
             backgroundImage:
-              'url("https://shadespace.com.sg/mobile/sources/img/slide-3.jpg")'
+              'url("https://shop.shadespace.com.sg/mobile/sources/img/slide-3.jpg")'
           }}
         >
-          <div className="slide-bg" style={{ backgroundImage: 'url("https://shadespace.com.sg/mobile/sources/img/slide-3.jpg")'}}></div>
+          <div className="slide-bg" style={{ backgroundImage: 'url("https://shop.shadespace.com.sg/mobile/sources/img/slide-3.jpg")'}}></div>
           <div className="slide-note">
             <h4>SHADES FOR SALE</h4>
             <div>Look no further for our monthly update sales.</div>

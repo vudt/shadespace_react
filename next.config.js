@@ -4,7 +4,7 @@ const nextConfig = {
   reactStrictMode: true,
   env: {
     HOME_URL: isProd ? 'https://dangtuanvu.com/app' : 'http://localhost:3000',
-    BASE_URL: 'https://shadespace.com.sg',
+    BASE_URL: 'https://shop.shadespace.com.sg',
     PREFIX_URL: isProd ? 'app' : '',
   },
   assetPrefix: isProd ? 'app' : '',
